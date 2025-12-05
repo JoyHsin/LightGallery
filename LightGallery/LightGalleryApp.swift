@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import Photos
 
 @main
 struct LightGalleryApp: App {
+    @StateObject private var localizationManager = LocalizationManager.shared
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainTabView()
+                .environmentObject(localizationManager)
         }
     }
 }
