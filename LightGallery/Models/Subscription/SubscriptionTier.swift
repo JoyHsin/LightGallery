@@ -91,6 +91,6 @@ enum SubscriptionStatus: String, Codable {
 
 enum PaymentMethod: String, Codable {
     case appleIAP = "apple_iap"
-    case wechatPay = "wechat_pay"
-    case alipay = "alipay"
+    // 注意: iOS 平台仅支持 Apple IAP，以下支付方式仅用于后端其他平台
+    // 根据 App Store Guideline 3.1.1，iOS 应用内数字内容必须使用 IAP
 }

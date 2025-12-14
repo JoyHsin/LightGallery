@@ -53,6 +53,8 @@ public class PaymentService {
      * Verify payment based on payment method
      * Routes to appropriate verification method based on payment platform
      * 
+     * IMPORTANT: iOS platform MUST use Apple IAP only (App Store Guideline 3.1.1)
+     * 
      * @param request Payment verification request
      * @return true if payment is verified, false otherwise
      */
@@ -60,13 +62,25 @@ public class PaymentService {
         log.info("Verifying payment: method={}, transactionId={}, platform={}", 
                 request.getPaymentMethod(), request.getTransactionId(), request.getPlatform());
 
+        // App Store Guideline 3.1.1 Compliance:
+        // iOS platform must exclusively use Apple IAP for digital content purchases
+        String platform = request.getPlatform();
+        if (platform != null && (platform.equalsIgnoreCase("ios") || platform.equalsIgnoreCase("iphone") || platform.equalsIgnoreCase("ipad"))) {
+            if (!"apple_iap".equalsIgnoreCase(request.getPaymentMethod())) {
+                log.error("iOS platform must use Apple IAP. Rejected payment method: {}", request.getPaymentMethod());
+                return false;
+            }
+        }
+
         try {
             switch (request.getPaymentMethod().toLowerCase()) {
                 case "apple_iap":
                     return verifyAppleIAPReceipt(request);
                 case "wechat_pay":
+                    // Only allowed for non-iOS platforms (Android, Web, etc.)
                     return verifyWeChatPayment(request);
                 case "alipay":
+                    // Only allowed for non-iOS platforms (Android, Web, etc.)
                     return verifyAlipayPayment(request);
                 default:
                     log.error("Unknown payment method: {}", request.getPaymentMethod());

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct LoginView: View {
     @StateObject private var viewModel = AuthViewModel()
@@ -33,24 +34,19 @@ struct LoginView: View {
             
             // Login Buttons
             VStack(spacing: 16) {
-                // Apple Sign In Button
-                Button(action: {
+                // Apple Sign In Button (App Store Guideline 4.8 Compliance)
+                // Using official SignInWithAppleButton for HIG compliance
+                SignInWithAppleButton(.signIn) { request in
+                    request.requestedScopes = [.fullName, .email]
+                } onCompletion: { result in
                     Task {
-                        await viewModel.signIn(with: .apple)
+                        await viewModel.handleAppleSignInResult(result)
                     }
-                }) {
-                    HStack {
-                        Image(systemName: "apple.logo")
-                            .font(.title3)
-                        Text("使用 Apple ID 登录")
-                            .fontWeight(.semibold)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.black)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
                 }
+                .signInWithAppleButtonStyle(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .cornerRadius(12)
                 
                 // WeChat Login Button
                 Button(action: {
@@ -103,7 +99,7 @@ struct LoginView: View {
             
             Spacer()
             
-            // Terms and Privacy
+            // Terms and Privacy (App Store Guideline 5.1.1 Compliance)
             VStack(spacing: 8) {
                 Text("登录即表示您同意我们的")
                     .font(.caption)
@@ -111,7 +107,7 @@ struct LoginView: View {
                 
                 HStack(spacing: 4) {
                     Button("服务条款") {
-                        // Open terms of service
+                        openURL(AppConstants.termsOfServiceURL)
                     }
                     .font(.caption)
                     
@@ -120,7 +116,7 @@ struct LoginView: View {
                         .foregroundColor(.secondary)
                     
                     Button("隐私政策") {
-                        // Open privacy policy
+                        openURL(AppConstants.privacyPolicyURL)
                     }
                     .font(.caption)
                 }
@@ -132,6 +128,17 @@ struct LoginView: View {
                 AuthLoadingView()
             }
         }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func openURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        #if os(iOS)
+        UIApplication.shared.open(url)
+        #elseif os(macOS)
+        NSWorkspace.shared.open(url)
+        #endif
     }
 }
 

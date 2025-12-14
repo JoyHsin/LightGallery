@@ -29,6 +29,9 @@ struct SubscriptionView: View {
                     // Restore Purchases Button
                     restorePurchasesButton
                     
+                    // Subscription Terms (App Store Guideline 3.1.2 Compliance)
+                    subscriptionTerms
+                    
                     // Error Message
                     if let errorMessage = viewModel.errorMessage {
                         errorSection(errorMessage)
@@ -275,6 +278,46 @@ struct SubscriptionView: View {
                 .foregroundColor(.blue)
         }
         .padding(.top)
+    }
+    
+    // MARK: - Subscription Terms (App Store Guideline 3.1.2 Compliance)
+    
+    private var subscriptionTerms: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Divider()
+                .padding(.vertical, 8)
+            
+            Group {
+                Text("• 订阅将自动续订，除非在当前订阅期结束前至少24小时关闭自动续订")
+                Text("• 账户将在当前订阅期结束前24小时内按所选套餐价格扣款")
+                Text("• 您可以在 App Store 账户设置中管理和取消订阅")
+                Text("• 购买后，任何未使用的免费试用期部分将被作废")
+            }
+            .font(.caption2)
+            .foregroundColor(.secondary)
+            
+            HStack(spacing: 16) {
+                Button("隐私政策") {
+                    openURL(AppConstants.privacyPolicyURL)
+                }
+                
+                Button("使用条款") {
+                    openURL(AppConstants.termsOfServiceURL)
+                }
+            }
+            .font(.caption)
+            .padding(.top, 8)
+        }
+        .padding(.top, 16)
+    }
+    
+    private func openURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        #if os(iOS)
+        UIApplication.shared.open(url)
+        #elseif os(macOS)
+        NSWorkspace.shared.open(url)
+        #endif
     }
     
     // MARK: - Error Section

@@ -608,21 +608,23 @@ enum SubscriptionError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .productNotFound:
-            return "未找到订阅产品"
-        case .purchaseFailed(let reason):
-            return "购买失败：\(reason)"
+            return "未找到订阅产品，请稍后重试"
+        case .purchaseFailed:
+            // 统一使用中文错误提示，避免混合语言
+            return "购买失败，请稍后重试"
         case .verificationFailed:
             return "支付验证失败，请联系客服"
         case .networkError:
-            return "网络连接失败，请检查网络设置"
+            return "网络连接失败，请检查网络设置后重试"
         case .userCancelled:
-            return "用户取消购买"
+            return "已取消购买"
         case .alreadySubscribed:
             return "您已经订阅了此服务"
         case .insufficientPermissions:
             return "权限不足，无法完成购买"
-        case .unknownError(let error):
-            return "购买失败：\(error.localizedDescription)"
+        case .unknownError:
+            // 统一使用中文错误提示，避免显示英文系统错误
+            return "购买失败，请稍后重试或联系客服"
         }
     }
 }

@@ -8,8 +8,18 @@
 import Foundation
 
 protocol AuthenticationServiceProtocol {
-    /// 使用 Apple ID 登录
+    /// 使用 Apple ID 登录 (legacy method)
     func signInWithApple() async throws -> User
+    
+    /// 使用 Apple ID 登录 (with credentials from SignInWithAppleButton)
+    /// App Store Guideline 4.8 Compliance
+    func signInWithApple(
+        userIdentifier: String,
+        identityToken: String,
+        authorizationCode: String,
+        fullName: PersonNameComponents?,
+        email: String?
+    ) async throws -> User
     
     /// 使用微信登录
     func signInWithWeChat() async throws -> User
@@ -106,6 +116,62 @@ class AuthenticationService: AuthenticationServiceProtocol {
         let formattedName = formatter.string(from: nameComponents)
         
         return formattedName.isEmpty ? nil : formattedName
+    }
+    
+    // MARK: - Apple Sign In with Credentials (App Store Guideline 4.8 Compliance)
+    
+    /// Sign in with Apple using credentials from SignInWithAppleButton
+    /// This method is used when the official Apple Sign In button is used
+    func signInWithApple(
+        userIdentifier: String,
+        identityToken: String,
+        authorizationCode: String,
+        fullName: PersonNameComponents?,
+        email: String?
+    ) async throws -> User {
+        // Exchange OAuth credential with backend
+        let oauthCredential = OAuthCredential(
+            provider: .apple,
+            authCode: authorizationCode,
+            idToken: identityToken,
+            email: email,
+            displayName: formatDisplayName(from: fullName)
+        )
+        
+        let authResponse = try await backendClient.exchangeOAuthToken(oauthCredential)
+        
+        // Create user from backend response
+        let user = User(
+            id: authResponse.user.id,
+            displayName: authResponse.user.displayName,
+            email: authResponse.user.email,
+            avatarURL: authResponse.user.avatarURL.flatMap { URL(string: $0) },
+            authProvider: .apple
+        )
+        
+        // Create auth token from backend response
+        let authToken = AuthToken(
+            accessToken: authResponse.accessToken,
+            refreshToken: authResponse.refreshToken,
+            expiresAt: authResponse.expiresAt,
+            tokenType: "Bearer"
+        )
+        
+        // Store token securely in Keychain
+        try secureStorage.saveAuthToken(authToken.accessToken, for: user.id)
+        
+        // Store user credentials
+        let credentials = UserCredentials(
+            userId: user.id,
+            authToken: authToken,
+            provider: .apple
+        )
+        try secureStorage.saveCredentials(credentials)
+        
+        // Update current user
+        currentUser = user
+        
+        return user
     }
     
     func signInWithWeChat() async throws -> User {

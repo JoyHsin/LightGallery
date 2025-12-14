@@ -394,8 +394,8 @@
 				DEVELOPMENT_TEAM = P9NDD6BA8Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "此应用需要访问相机来拍摄证件照。";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "此应用需要访问您的照片库来帮助您整理和管理照片。";
+				INFOPLIST_KEY_NSCameraUsageDescription = "LightGallery 需要访问相机来拍摄证件照。您的照片仅在本地处理，不会上传到服务器。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的照片库以分析重复照片、读取照片元数据（位置、设备信息）用于隐私擦除功能、管理和整理您的照片。所有照片仅在本地处理，不会上传到服务器。";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -434,8 +434,8 @@
 				DEVELOPMENT_TEAM = P9NDD6BA8Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "此应用需要访问相机来拍摄证件照。";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "此应用需要访问您的照片库来帮助您整理和管理照片。";
+				INFOPLIST_KEY_NSCameraUsageDescription = "LightGallery 需要访问相机来拍摄证件照。您的照片仅在本地处理，不会上传到服务器。";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的照片库以分析重复照片、读取照片元数据（位置、设备信息）用于隐私擦除功能、管理和整理您的照片。所有照片仅在本地处理，不会上传到服务器。";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

@@ -104,32 +104,46 @@ struct SettingsView: View {
                             .foregroundColor(.secondary)
                     }
                     
-                    NavigationLink {
-                        Text("Privacy Policy Content")
-                            .navigationTitle("Privacy Policy".localized)
+                    // Privacy Policy (App Store Guideline 5.1.1 Compliance)
+                    Button {
+                        openURL(AppConstants.privacyPolicyURL)
                     } label: {
-                        Label("Privacy Policy".localized, systemImage: "hand.raised.fill")
+                        HStack {
+                            Label("Privacy Policy".localized, systemImage: "hand.raised.fill")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     
-                    NavigationLink {
-                        Text("Terms of Service Content")
-                            .navigationTitle("Terms of Service".localized)
+                    // Terms of Service
+                    Button {
+                        openURL(AppConstants.termsOfServiceURL)
                     } label: {
-                        Label("Terms of Service".localized, systemImage: "doc.text.fill")
+                        HStack {
+                            Label("Terms of Service".localized, systemImage: "doc.text.fill")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
                 
                 // Support
                 Section(header: Text("Support".localized)) {
-                    NavigationLink {
-                        Text("Help Center Content")
-                            .navigationTitle("Help Center".localized)
+                    Button {
+                        openURL(AppConstants.supportURL)
                     } label: {
-                        Label("Help Center".localized, systemImage: "questionmark.circle.fill")
+                        HStack {
+                            Label("Help Center".localized, systemImage: "questionmark.circle.fill")
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     
                     Button {
-                        // Rate app action
+                        openURL(AppConstants.appStoreReviewURL)
                     } label: {
                         Label("Rate This App".localized, systemImage: "star.fill")
                     }
@@ -163,6 +177,15 @@ struct SettingsView: View {
         case .max:
             return "旗舰版用户"
         }
+    }
+    
+    private func openURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        #if os(iOS)
+        UIApplication.shared.open(url)
+        #elseif os(macOS)
+        NSWorkspace.shared.open(url)
+        #endif
     }
 }
 
