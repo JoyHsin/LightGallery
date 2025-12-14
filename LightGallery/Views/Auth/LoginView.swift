@@ -120,6 +120,16 @@ struct LoginView: View {
                     }
                     .font(.caption)
                 }
+                
+                // Debug button (only show in debug builds)
+                #if DEBUG
+                NavigationLink("认证调试") {
+                    AuthDebugView()
+                }
+                .font(.caption2)
+                .foregroundColor(.gray)
+                .padding(.top, 8)
+                #endif
             }
             .padding(.bottom, 32)
         }

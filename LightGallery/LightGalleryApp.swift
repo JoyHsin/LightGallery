@@ -12,6 +12,7 @@ import Photos
 struct LightGalleryApp: App {
     @StateObject private var localizationManager = LocalizationManager.shared
     @StateObject private var subscriptionViewModel = SubscriptionViewModel()
+    @StateObject private var loginPromptManager = LoginPromptManager.shared
     
     // OAuth managers for handling callbacks
     private let wechatManager = WeChatOAuthManager()
@@ -32,6 +33,7 @@ struct LightGalleryApp: App {
             MainTabView()
                 .environmentObject(localizationManager)
                 .environmentObject(subscriptionViewModel)
+                .environmentObject(loginPromptManager)
                 .onOpenURL { url in
                     handleOpenURL(url)
                 }

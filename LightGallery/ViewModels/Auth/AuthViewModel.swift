@@ -18,7 +18,7 @@ class AuthViewModel: ObservableObject {
     
     private let authService: AuthenticationServiceProtocol
     
-    init(authService: AuthenticationServiceProtocol = AuthenticationService.shared) {
+    init(authService: AuthenticationServiceProtocol = AuthConfig.getAuthenticationService()) {
         self.authService = authService
         self.currentUser = authService.getCurrentUser()
         self.isAuthenticated = currentUser != nil

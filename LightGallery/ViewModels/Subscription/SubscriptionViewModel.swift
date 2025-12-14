@@ -38,6 +38,16 @@ class SubscriptionViewModel: ObservableObject {
     
     /// Purchase a subscription product
     func purchase(_ product: SubscriptionProduct) async {
+        // Check if user is logged in first
+        let authService = AuthenticationService.shared
+        guard authService.getCurrentUser() != nil else {
+            // User not logged in, show login required message
+            errorMessage = "请先登录后再订阅"
+            // Send notification to show login view
+            NotificationCenter.default.post(name: .loginRequiredForSubscription, object: product)
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
         

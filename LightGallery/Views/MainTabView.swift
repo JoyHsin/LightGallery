@@ -10,8 +10,11 @@ import SwiftUI
 struct MainTabView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     @EnvironmentObject var subscriptionViewModel: SubscriptionViewModel
+    @EnvironmentObject var loginPromptManager: LoginPromptManager
     @State private var selectedTab = 0
     @State private var showRenewalPrompt = false
+    @State private var showPaywall = false
+    @State private var paywallFeature: PremiumFeature?
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -57,11 +60,44 @@ struct MainTabView: View {
                 showRenewalPrompt = true
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .showPaywall)) { notification in
+            // Handle paywall display for features
+            if let feature = notification.userInfo?["feature"] as? PremiumFeature {
+                paywallFeature = feature
+                showPaywall = true
+            }
+        }
         .sheet(isPresented: $showRenewalPrompt) {
             if let expiredSubscription = subscriptionViewModel.currentSubscription {
                 RenewalPromptView(expiredSubscription: expiredSubscription)
                     .environmentObject(subscriptionViewModel)
             }
+        }
+        .sheet(isPresented: $showPaywall) {
+            if let feature = paywallFeature {
+                PaywallView(feature: feature)
+            }
+        }
+        .alert(loginPromptManager.alertTitle, isPresented: $loginPromptManager.showLoginAlert) {
+            Button("取消", role: .cancel) {
+                loginPromptManager.cancelLogin()
+            }
+            Button("去登录") {
+                loginPromptManager.showLogin()
+            }
+        } message: {
+            Text(loginPromptManager.alertMessage)
+        }
+        .sheet(isPresented: $loginPromptManager.showLoginView) {
+            LoginView()
+                .onDisappear {
+                    // Check if user logged in successfully
+                    if AuthenticationService.shared.getCurrentUser() != nil {
+                        loginPromptManager.handleLoginSuccess()
+                    } else {
+                        loginPromptManager.cancelLogin()
+                    }
+                }
         }
     }
 }

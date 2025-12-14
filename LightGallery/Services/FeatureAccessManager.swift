@@ -18,12 +18,39 @@ class FeatureAccessManager: ObservableObject {
     init(subscriptionService: SubscriptionServiceProtocol = SubscriptionService()) {
         self.subscriptionService = subscriptionService
         
-        // Initialize with mock free subscription for development
-        self.currentSubscription = createMockFreeSubscription()
+        // Don't initialize with any subscription - let loadCurrentSubscription handle it
+        self.currentSubscription = nil
         
         // Load actual subscription asynchronously
         Task {
             await loadCurrentSubscription()
+        }
+        
+        // Listen for login/logout events
+        setupAuthNotifications()
+    }
+    
+    private func setupAuthNotifications() {
+        NotificationCenter.default.addObserver(
+            forName: .userDidLogin,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task {
+                await self?.loadCurrentSubscription()
+            }
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: .userDidLogout,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task {
+                await MainActor.run {
+                    self?.currentSubscription = nil
+                }
+            }
         }
     }
     
@@ -31,6 +58,13 @@ class FeatureAccessManager: ObservableObject {
     /// - Parameter feature: The premium feature to check
     /// - Returns: True if user has access, false otherwise
     func canAccessFeature(_ feature: PremiumFeature) -> Bool {
+        // Check if user is logged in first
+        let authService = AuthenticationService.shared
+        guard authService.getCurrentUser() != nil else {
+            // User not logged in, no access to premium features
+            return false
+        }
+        
         // Get current subscription tier (uses cache-first approach)
         let tier = getCurrentTier()
         
@@ -85,8 +119,19 @@ class FeatureAccessManager: ObservableObject {
     ///   - feature: The premium feature that triggered the paywall
     ///   - presentingView: The view to present the paywall from
     func showPaywall(for feature: PremiumFeature) {
-        // This will be called from SwiftUI views
-        // The actual presentation is handled by the view layer
+        // Check if user is logged in first
+        let authService = AuthenticationService.shared
+        guard authService.getCurrentUser() != nil else {
+            // User not logged in, show login required for feature access
+            NotificationCenter.default.post(
+                name: .loginRequiredForFeature,
+                object: nil,
+                userInfo: ["feature": feature]
+            )
+            return
+        }
+        
+        // User is logged in, show normal paywall
         NotificationCenter.default.post(
             name: .showPaywall,
             object: nil,
@@ -97,6 +142,13 @@ class FeatureAccessManager: ObservableObject {
     /// Get the current subscription tier
     /// - Returns: Current subscription tier (defaults to free if no subscription or expired)
     func getCurrentTier() -> SubscriptionTier {
+        // Check if user is logged in first
+        let authService = AuthenticationService.shared
+        guard authService.getCurrentUser() != nil else {
+            // User not logged in, always return free tier
+            return .free
+        }
+        
         // Try to get cached subscription first
         if let subscription = currentSubscription {
             // Check if subscription is expired
@@ -123,31 +175,25 @@ class FeatureAccessManager: ObservableObject {
     /// Load current subscription asynchronously
     @MainActor
     private func loadCurrentSubscription() async {
+        // Check if user is logged in first
+        let authService = AuthenticationService.shared
+        guard authService.getCurrentUser() != nil else {
+            // User not logged in, clear any subscription
+            self.currentSubscription = nil
+            return
+        }
+        
         do {
             let subscription = try await subscriptionService.getCurrentSubscription()
             self.currentSubscription = subscription
         } catch {
             print("Failed to load current subscription: \(error)")
-            // For development, create a mock free subscription
-            self.currentSubscription = createMockFreeSubscription()
+            // Clear subscription on error for logged in users
+            self.currentSubscription = nil
         }
     }
     
-    /// Create a mock free subscription for development
-    private func createMockFreeSubscription() -> Subscription {
-        return Subscription(
-            id: "mock_free_subscription",
-            userId: "current_user",
-            tier: .free,
-            billingPeriod: .monthly,
-            status: .active,
-            startDate: Date(),
-            expiryDate: Calendar.current.date(byAdding: .year, value: 100, to: Date()) ?? Date(),
-            autoRenew: false,
-            paymentMethod: .appleIAP,
-            lastSyncedAt: Date()
-        )
-    }
+
     
     /// Update the current subscription (called by SubscriptionService)
     /// - Parameter subscription: The updated subscription
@@ -203,9 +249,4 @@ class FeatureAccessManager: ObservableObject {
     }
 }
 
-// MARK: - Notification Names
 
-extension Notification.Name {
-    static let showPaywall = Notification.Name("showPaywall")
-    static let subscriptionExpired = Notification.Name("subscriptionExpired")
-}

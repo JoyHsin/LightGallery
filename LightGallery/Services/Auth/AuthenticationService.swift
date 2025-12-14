@@ -105,6 +105,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // Update current user
         currentUser = user
         
+        // 发送登录成功通知
+        NotificationCenter.default.post(name: .userDidLogin, object: user)
+        
         return user
     }
     
@@ -172,6 +175,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // Update current user
         currentUser = user
         
+        // 发送登录成功通知
+        NotificationCenter.default.post(name: .userDidLogin, object: user)
+        
         return user
     }
     
@@ -221,6 +227,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // Update current user
         currentUser = user
         
+        // 发送登录成功通知
+        NotificationCenter.default.post(name: .userDidLogin, object: user)
+        
         return user
     }
     
@@ -269,6 +278,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         // Update current user
         currentUser = user
+        
+        // 发送登录成功通知
+        NotificationCenter.default.post(name: .userDidLogin, object: user)
         
         return user
     }
@@ -334,6 +346,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         // Clear current user
         currentUser = nil
+        
+        // 发送登出通知
+        NotificationCenter.default.post(name: .userDidLogout, object: nil)
     }
     
     func getCurrentUser() -> User? {

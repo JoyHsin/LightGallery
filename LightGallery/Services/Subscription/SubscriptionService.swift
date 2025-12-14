@@ -72,13 +72,35 @@ class SubscriptionService: SubscriptionServiceProtocol {
     }
     
     func fetchAvailableProducts() async throws -> [SubscriptionProduct] {
-        // Always return mock products for development/testing
-        // This allows UI testing without App Store Connect configuration
+        // Try to fetch from backend first, fallback to mock for development
+        print("🔄 [SubscriptionService] Fetching available products...")
+        print("🌐 [SubscriptionService] Network connected: \(networkMonitor.isConnected)")
         
-        print("Using mock products for development/testing")
-        return createMockProducts()
+        do {
+            // Check if backend is available
+            if networkMonitor.isConnected {
+                print("🚀 [SubscriptionService] Attempting to fetch products from backend...")
+                // Try to fetch products from backend
+                let productDTOs = try await backendAPIClient.getSubscriptionProducts()
+                if !productDTOs.isEmpty {
+                    print("✅ [SubscriptionService] Successfully fetched \(productDTOs.count) products from backend")
+                    let products = convertDTOsToProducts(productDTOs)
+                    print("📦 [SubscriptionService] Converted products: \(products.map { $0.id })")
+                    return products
+                } else {
+                    print("⚠️ [SubscriptionService] Backend returned empty product list")
+                }
+            } else {
+                print("❌ [SubscriptionService] Network not connected, skipping backend fetch")
+            }
+        } catch {
+            print("❌ [SubscriptionService] Failed to fetch products from backend: \(error)")
+            if let backendError = error as? BackendAPIError {
+                print("🔍 [SubscriptionService] Backend error details: \(backendError.errorDescription ?? "Unknown")")
+            }
+        }
         
-        // TODO: Enable real StoreKit integration when App Store Connect is configured
+        // Fallback to StoreKit products
         /*
         do {
             // Try to fetch products from Apple IAP
@@ -118,6 +140,12 @@ class SubscriptionService: SubscriptionServiceProtocol {
         print("Using mock products as fallback")
         return createMockProducts()
         */
+        
+        // Final fallback to mock products for development/testing
+        print("🎭 [SubscriptionService] Using mock products as fallback")
+        let mockProducts = createMockProducts()
+        print("📦 [SubscriptionService] Mock products: \(mockProducts.map { $0.id })")
+        return mockProducts
     }
     
     /// Create mock products for development/testing
@@ -167,8 +195,17 @@ class SubscriptionService: SubscriptionServiceProtocol {
     }
     
     func purchase(_ product: SubscriptionProduct) async throws -> PurchaseResult {
-        // Always simulate successful purchase for development/testing
-        print("Simulating successful purchase for product: \(product.id)")
+        print("🛒 [SubscriptionService] Starting purchase for product: \(product.id)")
+        
+        // Check if we have StoreKit product for real purchase
+        if let storeKitProduct = product.storeKitProduct {
+            print("💳 [SubscriptionService] Real StoreKit purchase not implemented yet, using mock")
+            // TODO: Implement real StoreKit purchase flow
+            // For now, fall through to mock purchase
+        }
+        
+        // Fallback to mock purchase for development/testing
+        print("🎭 [SubscriptionService] Simulating successful purchase for product: \(product.id)")
         
         let mockSubscription = Subscription(
             id: UUID().uuidString,
@@ -186,71 +223,14 @@ class SubscriptionService: SubscriptionServiceProtocol {
         // Cache the mock subscription
         subscriptionCache.cacheSubscription(mockSubscription)
         
+        print("✅ [SubscriptionService] Mock purchase successful: \(mockSubscription.tier.displayName)")
         return PurchaseResult(
             success: true,
             subscription: mockSubscription,
             transaction: nil,
             error: nil
         )
-        
-        // TODO: Enable real IAP when App Store Connect is configured
-        /*
-        guard let storeKitProduct = product.storeKitProduct else {
-            throw SubscriptionError.productNotFound
-        }
-        
-        do {
-            // Purchase through Apple IAP
-            let transaction = try await appleIAPManager.purchase(storeKitProduct)
-            
-            // Get auth token for backend verification
-            guard let authToken = try? SecureStorage.shared.getCredentials()?.authToken.accessToken else {
-                throw SubscriptionError.verificationFailed
-            }
-            
-            // Verify with backend
-            let verificationResponse = try await backendAPIClient.verifyAppleReceipt(transaction, authToken: authToken)
-            
-            guard verificationResponse.success else {
-                throw SubscriptionError.verificationFailed
-            }
-            
-            // Create subscription from backend response or transaction
-            let subscription: Subscription
-            if let subscriptionDTO = verificationResponse.subscription {
-                subscription = try convertDTOToSubscription(subscriptionDTO)
-            } else {
-                subscription = try await createSubscriptionFromTransaction(transaction, product: product)
-            }
-            
-            // Cache the subscription
-            subscriptionCache.cacheSubscription(subscription)
-            
-            // Sync with backend
-            try? await backendAPIClient.syncSubscription(subscription, authToken: authToken)
-            
-            return PurchaseResult(
-                success: true,
-                subscription: subscription,
-                transaction: transaction,
-                error: nil
-            )
-        } catch let error as SubscriptionError {
-            return PurchaseResult(
-                success: false,
-                subscription: nil,
-                transaction: nil,
-                error: error
-            )
-        } catch {
-            return PurchaseResult(
-                success: false,
-                subscription: nil,
-                transaction: nil,
-                error: SubscriptionError.unknownError(error)
-            )
-        }
-        */
+
     }
     
     func restorePurchases() async throws -> [Subscription] {
@@ -274,13 +254,36 @@ class SubscriptionService: SubscriptionServiceProtocol {
     }
     
     func getCurrentSubscription() async throws -> Subscription? {
+        print("🔄 [SubscriptionService] Getting current subscription...")
+        
         // Check cache first
         if let cachedSubscription = subscriptionCache.getCachedSubscription(),
            subscriptionCache.isCacheValid() {
+            print("💾 [SubscriptionService] Using cached subscription: \(cachedSubscription.tier.displayName)")
             return cachedSubscription
         }
         
-        // Try to fetch from Apple if cache is stale
+        // Try to fetch from backend first
+        print("🌐 [SubscriptionService] Network connected: \(networkMonitor.isConnected)")
+        do {
+            if networkMonitor.isConnected,
+               let authToken = try? SecureStorage.shared.getCredentials()?.authToken.accessToken {
+                print("🚀 [SubscriptionService] Attempting to fetch subscription from backend...")
+                let subscriptionDTO = try await backendAPIClient.getSubscriptionStatus(authToken: authToken)
+                let subscription = try convertDTOToSubscription(subscriptionDTO)
+                
+                print("✅ [SubscriptionService] Successfully fetched subscription from backend: \(subscription.tier.displayName)")
+                // Update cache with fresh data
+                subscriptionCache.cacheSubscription(subscription)
+                return subscription
+            } else {
+                print("⚠️ [SubscriptionService] No auth token or network not connected, skipping backend fetch")
+            }
+        } catch {
+            print("❌ [SubscriptionService] Failed to fetch subscription from backend: \(error)")
+        }
+        
+        // Fallback to Apple IAP if backend fails
         do {
             let subscriptions = try await restorePurchases()
             let activeSubscription = subscriptions.first(where: { $0.isActive })
@@ -525,6 +528,27 @@ class SubscriptionService: SubscriptionServiceProtocol {
     }
     
     // MARK: - Private Helpers
+    
+    /// Convert backend DTOs to domain models
+    private func convertDTOsToProducts(_ dtos: [SubscriptionProductDTO]) -> [SubscriptionProduct] {
+        return dtos.compactMap { dto in
+            guard let tier = SubscriptionTier(rawValue: dto.tier),
+                  let period = BillingPeriod(rawValue: dto.billingPeriod) else {
+                return nil
+            }
+            
+            return SubscriptionProduct(
+                id: dto.id,
+                tier: tier,
+                billingPeriod: period,
+                price: dto.price,
+                currency: dto.currency,
+                localizedPrice: dto.localizedPrice,
+                localizedDescription: dto.localizedDescription,
+                storeKitProduct: nil // Backend products don't have StoreKit products
+            )
+        }
+    }
     
     private func parseProductId(_ productId: String) -> (SubscriptionTier, BillingPeriod)? {
         let components = productId.split(separator: ".")

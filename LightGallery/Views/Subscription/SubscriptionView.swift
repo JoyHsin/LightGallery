@@ -10,6 +10,9 @@ import SwiftUI
 struct SubscriptionView: View {
     @StateObject private var viewModel = SubscriptionViewModel()
     @Environment(\.dismiss) private var dismiss
+    @State private var showLoginView = false
+    @State private var showLoginAlert = false
+    @State private var pendingProduct: SubscriptionProduct?
     
     var body: some View {
         NavigationView {
@@ -60,6 +63,36 @@ struct SubscriptionView: View {
         .task {
             await viewModel.loadProducts()
             await viewModel.checkSubscriptionStatus()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .loginRequiredForSubscription)) { notification in
+            if let product = notification.object as? SubscriptionProduct {
+                pendingProduct = product
+                showLoginAlert = true
+            }
+        }
+        .alert("需要登录", isPresented: $showLoginAlert) {
+            Button("取消", role: .cancel) {
+                pendingProduct = nil
+            }
+            Button("去登录") {
+                showLoginView = true
+            }
+        } message: {
+            Text("订阅功能需要登录账户，请先登录后再进行订阅")
+        }
+        .sheet(isPresented: $showLoginView) {
+            LoginView()
+                .onDisappear {
+                    // Check if user logged in successfully
+                    if AuthenticationService.shared.getCurrentUser() != nil,
+                       let product = pendingProduct {
+                        // User logged in, proceed with purchase
+                        Task {
+                            await viewModel.purchase(product)
+                        }
+                    }
+                    pendingProduct = nil
+                }
         }
     }
     

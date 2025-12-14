@@ -204,9 +204,9 @@ class BackendAPIClient {
         
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let products = try decoder.decode([SubscriptionProductDTO].self, from: data)
+        let apiResponse = try decoder.decode(ApiResponse<[SubscriptionProductDTO]>.self, from: data)
         
-        return products
+        return apiResponse.data
     }
     
     /// Get current subscription status
@@ -230,9 +230,9 @@ class BackendAPIClient {
         
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let subscription = try decoder.decode(SubscriptionDTO.self, from: data)
+        let apiResponse = try decoder.decode(ApiResponse<SubscriptionDTO>.self, from: data)
         
-        return subscription
+        return apiResponse.data
     }
     
     /// Verify Apple IAP receipt with backend
@@ -269,9 +269,9 @@ class BackendAPIClient {
         
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let verificationResponse = try decoder.decode(SubscriptionVerificationResponse.self, from: data)
+        let apiResponse = try decoder.decode(ApiResponse<SubscriptionVerificationResponse>.self, from: data)
         
-        return verificationResponse
+        return apiResponse.data
     }
     
     /// Sync subscription status with backend
@@ -322,9 +322,9 @@ class BackendAPIClient {
         
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
-        let profile = try decoder.decode(UserProfile.self, from: data)
+        let apiResponse = try decoder.decode(ApiResponse<UserProfile>.self, from: data)
         
-        return profile
+        return apiResponse.data
     }
     
     /// Update user profile
@@ -350,6 +350,46 @@ class BackendAPIClient {
         
         try validateResponse(response)
         logResponse(response, data: data)
+    }
+    
+    /// Upload user avatar
+    func uploadAvatar(_ imageData: Data, authToken: String) async throws -> AvatarUploadResponse {
+        let endpoint = "\(baseURL)/api/v1/user/avatar"
+        
+        guard let url = URL(string: endpoint) else {
+            throw BackendAPIError.invalidURL
+        }
+        
+        // Create multipart form data
+        let boundary = UUID().uuidString
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        var body = Data()
+        
+        // Add image data
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"avatar\"; filename=\"avatar.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append("--\(boundary)--\r\n".data(using: .utf8)!)
+        
+        request.httpBody = body
+        
+        logRequest(request, body: nil)
+        
+        let (data, response) = try await session.data(for: request)
+        
+        try validateResponse(response)
+        logResponse(response, data: data)
+        
+        let decoder = JSONDecoder()
+        let apiResponse = try decoder.decode(ApiResponse<AvatarUploadResponse>.self, from: data)
+        
+        return apiResponse.data
     }
     
     // MARK: - Private Helpers
@@ -398,6 +438,13 @@ class BackendAPIClient {
 }
 
 // MARK: - Request/Response Models
+
+// API Response Wrapper
+struct ApiResponse<T: Codable>: Codable {
+    let code: Int
+    let message: String
+    let data: T
+}
 
 // Authentication
 struct OAuthExchangeRequest: Codable {
@@ -461,6 +508,17 @@ struct SubscriptionProductDTO: Codable {
     let currency: String
     let localizedPrice: String
     let localizedDescription: String
+    
+    // Map backend field names to iOS field names
+    enum CodingKeys: String, CodingKey {
+        case id = "productId"
+        case tier
+        case billingPeriod
+        case price
+        case currency
+        case localizedPrice
+        case localizedDescription = "description"
+    }
 }
 
 // User Profile
@@ -469,6 +527,11 @@ struct UserProfile: Codable {
     var displayName: String
     var email: String?
     var avatarURL: String?
+}
+
+struct AvatarUploadResponse: Codable {
+    let avatarURL: String
+    let message: String?
 }
 
 // OAuth Credential
