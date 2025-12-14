@@ -9,7 +9,7 @@ import Foundation
 import Photos
 import UIKit
 import ImageIO
-import MobileCoreServices
+import UniformTypeIdentifiers
 
 class LivePhotoService {
     static let shared = LivePhotoService()
@@ -65,7 +65,7 @@ class LivePhotoService {
             let timePoints = (0..<frameCount).map { CMTime(seconds: Double($0) / frameRate, preferredTimescale: 600) }
             
             let destinationData = NSMutableData()
-            guard let destination = CGImageDestinationCreateWithData(destinationData, kUTTypeGIF, frameCount, nil) else {
+            guard let destination = CGImageDestinationCreateWithData(destinationData, UTType.gif.identifier as CFString, frameCount, nil) else {
                 continuation.resume(returning: nil)
                 return
             }

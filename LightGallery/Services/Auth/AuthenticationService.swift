@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Contacts
 
 protocol AuthenticationServiceProtocol {
     /// 使用 Apple ID 登录 (legacy method)
@@ -364,34 +365,5 @@ class AuthenticationService: AuthenticationServiceProtocol {
         try secureStorage.saveAuthToken(newAuthToken.accessToken, for: credentials.userId)
         
         return newAuthToken.accessToken
-    }
-}
-
-enum AuthError: LocalizedError {
-    case oauthFailed(provider: AuthProvider, reason: String)
-    case tokenExpired
-    case tokenInvalid
-    case networkError
-    case userCancelled
-    case notImplemented
-    case unknownError(Error)
-    
-    var errorDescription: String? {
-        switch self {
-        case .oauthFailed(let provider, let reason):
-            return "登录失败：\(provider.displayName) - \(reason)"
-        case .tokenExpired:
-            return "登录已过期，请重新登录"
-        case .tokenInvalid:
-            return "登录信息无效，请重新登录"
-        case .networkError:
-            return "网络连接失败，请检查网络设置"
-        case .userCancelled:
-            return "用户取消登录"
-        case .notImplemented:
-            return "功能尚未实现"
-        case .unknownError(let error):
-            return "登录失败：\(error.localizedDescription)"
-        }
     }
 }

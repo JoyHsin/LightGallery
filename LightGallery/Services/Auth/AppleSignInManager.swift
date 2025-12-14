@@ -7,6 +7,12 @@
 
 import Foundation
 import AuthenticationServices
+import Contacts
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 /// Apple Sign In credential data
 struct AppleIDCredential {
@@ -105,6 +111,18 @@ extension AppleSignInManager: ASAuthorizationControllerDelegate {
                 authError = .oauthFailed(provider: .apple, reason: "请求未处理")
             case .unknown:
                 authError = .oauthFailed(provider: .apple, reason: "未知错误")
+            case .notInteractive:
+                authError = .oauthFailed(provider: .apple, reason: "非交互式认证失败")
+            case .matchedExcludedCredential:
+                authError = .oauthFailed(provider: .apple, reason: "匹配到排除的凭据")
+            case .credentialImport:
+                authError = .oauthFailed(provider: .apple, reason: "凭据导入失败")
+            case .credentialExport:
+                authError = .oauthFailed(provider: .apple, reason: "凭据导出失败")
+            case .preferSignInWithApple:
+                authError = .oauthFailed(provider: .apple, reason: "建议使用Apple登录")
+            case .deviceNotConfiguredForPasskeyCreation:
+                authError = .oauthFailed(provider: .apple, reason: "设备未配置通行密钥创建")
             @unknown default:
                 authError = .unknownError(error)
             }

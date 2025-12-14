@@ -152,24 +152,3 @@ class AuthViewModel: ObservableObject {
         isLoading = false
     }
 }
-
-/// Authentication errors
-enum AuthError: LocalizedError {
-    case invalidCredentials
-    case networkError
-    case serverError
-    case userCancelled
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidCredentials:
-            return "无效的登录凭证"
-        case .networkError:
-            return "网络连接失败"
-        case .serverError:
-            return "服务器错误"
-        case .userCancelled:
-            return "用户取消登录"
-        }
-    }
-}
