@@ -85,7 +85,10 @@ struct HomeView: View {
             .background(Color(uiColor: .systemGroupedBackground))
             .navigationTitle("Summary".localized)
             .onAppear {
-                loadStats()
+                // Load stats asynchronously without blocking UI
+                Task {
+                    await loadStats()
+                }
             }
             .sheet(isPresented: $showScreenshots) {
                 ScreenshotCleanupView()
@@ -102,8 +105,7 @@ struct HomeView: View {
         }
     }
     
-    private func loadStats() {
-        Task {
+    private func loadStats() async {
             // 1. Load screenshot count
             let screenshotOptions = PHFetchOptions()
             screenshotOptions.predicate = NSPredicate(format: "mediaSubtype == %d", PHAssetMediaSubtype.photoScreenshot.rawValue)
@@ -154,21 +156,20 @@ struct HomeView: View {
                 print("Error retrieving storage info: \(error)")
             }
             
-            // Update UI
-            await MainActor.run {
-                self.screenshotCount = screenshots.count
-                
-                let formatter = ByteCountFormatter()
-                formatter.allowedUnits = [.useGB, .useMB]
-                formatter.countStyle = .file
-                
-                self.usedStorage = formatter.string(fromByteCount: usedDisk)
-                self.totalStorage = formatter.string(fromByteCount: totalDisk)
-                self.usedPercent = totalDisk > 0 ? Double(usedDisk) / Double(totalDisk) : 0
-                
-                self.photoLibrarySize = formatter.string(fromByteCount: totalPhotoSize)
-                self.weeklyGrowth = formatter.string(fromByteCount: thisWeekSize)
-            }
+        // Update UI
+        await MainActor.run {
+            self.screenshotCount = screenshots.count
+            
+            let formatter = ByteCountFormatter()
+            formatter.allowedUnits = [.useGB, .useMB]
+            formatter.countStyle = .file
+            
+            self.usedStorage = formatter.string(fromByteCount: usedDisk)
+            self.totalStorage = formatter.string(fromByteCount: totalDisk)
+            self.usedPercent = totalDisk > 0 ? Double(usedDisk) / Double(totalDisk) : 0
+            
+            self.photoLibrarySize = formatter.string(fromByteCount: totalPhotoSize)
+            self.weeklyGrowth = formatter.string(fromByteCount: thisWeekSize)
         }
     }
 }

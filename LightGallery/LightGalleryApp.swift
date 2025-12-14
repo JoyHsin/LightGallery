@@ -36,8 +36,10 @@ struct LightGalleryApp: App {
                     handleOpenURL(url)
                 }
                 .task {
-                    // Check subscription expiration on app launch
-                    await subscriptionViewModel.checkExpirationOnLaunch()
+                    // Check subscription expiration on app launch (non-blocking)
+                    Task.detached {
+                        await subscriptionViewModel.checkExpirationOnLaunch()
+                    }
                 }
         }
     }
