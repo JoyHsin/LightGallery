@@ -217,6 +217,28 @@ class MockPhotoServiceForCompletion: PhotoServiceProtocol {
     func getPhotoCreationDate(_ asset: PhotoAsset) -> Date? {
         return asset.creationDate
     }
+    
+    func deletePhotos(_ assets: [PhotoAsset]) async throws {
+        if shouldThrowError {
+            throw PhotoError.deletionFailed("Test error")
+        }
+    }
+    
+    func fetchScreenshots() async throws -> [PhotoAsset] {
+        try await ensurePhotoLibraryAccess()
+        // For mock purposes, return all photos or filter based on test setup
+        return mockPhotos
+    }
+    
+    func fetchUserAlbums() -> [PHAssetCollection] {
+        return []
+    }
+    
+    func addAssetToAlbum(asset: PHAsset, album: PHAssetCollection) async throws {
+        if shouldThrowError {
+            throw PhotoError.loadingFailed("Test error")
+        }
+    }
 }
 
 class MockPHAssetForCompletion: PHAsset, @unchecked Sendable {

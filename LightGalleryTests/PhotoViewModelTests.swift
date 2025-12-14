@@ -381,6 +381,27 @@ class MockPhotoServiceForViewModel: PhotoServiceProtocol {
     func getPhotoCreationDate(_ asset: PhotoAsset) -> Date? {
         return asset.creationDate
     }
+    
+    func deletePhotos(_ assets: [PhotoAsset]) async throws {
+        if shouldThrowError {
+            throw PhotoError.deletionFailed("Test error")
+        }
+    }
+    
+    func fetchScreenshots() async throws -> [PhotoAsset] {
+        try await ensurePhotoLibraryAccess()
+        return mockPhotos
+    }
+    
+    func fetchUserAlbums() -> [PHAssetCollection] {
+        return []
+    }
+    
+    func addAssetToAlbum(asset: PHAsset, album: PHAssetCollection) async throws {
+        if shouldThrowError {
+            throw PhotoError.loadingFailed("Test error")
+        }
+    }
 }
 
 class MockPHAssetForViewModel: PHAsset, @unchecked Sendable {

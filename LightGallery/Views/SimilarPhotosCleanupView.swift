@@ -12,6 +12,8 @@ struct SimilarPhotosCleanupView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = SimilarPhotosViewModel()
+    @StateObject private var featureAccessManager = FeatureAccessManager.shared
+    @State private var showPaywall = false
     
     var body: some View {
         NavigationView {
@@ -99,7 +101,15 @@ struct SimilarPhotosCleanupView: View {
                 }
             }
             .task {
-                await viewModel.scanForSimilarPhotos()
+                // Check access before scanning
+                if featureAccessManager.canAccessFeature(.similarPhotoCleanup) {
+                    await viewModel.scanForSimilarPhotos()
+                } else {
+                    showPaywall = true
+                }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(feature: .similarPhotoCleanup)
             }
         }
     }

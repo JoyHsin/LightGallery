@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/lightgallery_dev?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+
+# Development logging
+logging:
+  level:
+    root: DEBUG
+    com.lightgallery.backend: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+# Disable SSL in development
+server:
+  ssl:
+    enabled: false

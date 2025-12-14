@@ -11,7 +11,9 @@ import Photos
 struct DuplicatesView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     @StateObject private var viewModel = DuplicatesViewModel()
+    @StateObject private var featureAccessManager = FeatureAccessManager.shared
     @Environment(\.dismiss) var dismiss
+    @State private var showPaywall = false
     
     var body: some View {
         NavigationStack {
@@ -77,7 +79,15 @@ struct DuplicatesView: View {
                 }
             }
             .onAppear {
-                viewModel.scan()
+                // Check access before scanning
+                if featureAccessManager.canAccessFeature(.duplicateDetection) {
+                    viewModel.scan()
+                } else {
+                    showPaywall = true
+                }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(feature: .duplicateDetection)
             }
             .alert("Merge All Duplicates?".localized, isPresented: $viewModel.showMergeConfirmation) {
                 Button("Merge".localized, role: .destructive) {

@@ -46,9 +46,19 @@ struct SmartCleanCategory: Identifiable {
 
 class SmartCleanManager {
     static let shared = SmartCleanManager()
-    private init() {}
+    private let featureAccessManager: FeatureAccessManager
+    
+    private init(featureAccessManager: FeatureAccessManager = .shared) {
+        self.featureAccessManager = featureAccessManager
+    }
     
     func scan() async -> [SmartCleanCategory] {
+        // Check if user has access to smart clean feature
+        guard featureAccessManager.canAccessFeature(.smartClean) else {
+            // Show paywall
+            featureAccessManager.showPaywall(for: .smartClean)
+            return []
+        }
         var categories: [SmartCleanCategory] = []
         
         // 1. Duplicates

@@ -10,7 +10,9 @@ import SwiftUI
 struct SmartCleanSummaryView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     @StateObject private var viewModel = SmartCleanViewModel()
+    @StateObject private var featureAccessManager = FeatureAccessManager.shared
     @Environment(\.dismiss) var dismiss
+    @State private var showPaywall = false
     
     var body: some View {
         NavigationStack {
@@ -64,7 +66,15 @@ struct SmartCleanSummaryView: View {
                 }
             }
             .onAppear {
-                viewModel.scan()
+                // Check access before scanning
+                if featureAccessManager.canAccessFeature(.smartClean) {
+                    viewModel.scan()
+                } else {
+                    showPaywall = true
+                }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(feature: .smartClean)
             }
         }
     }

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
+    @EnvironmentObject var subscriptionViewModel: SubscriptionViewModel
     @State private var selectedTab = 0
+    @State private var showRenewalPrompt = false
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -48,6 +50,18 @@ struct MainTabView: View {
             appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = appearance
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .subscriptionExpired)) { _ in
+            // Show renewal prompt when subscription expires
+            if subscriptionViewModel.isSubscriptionExpired {
+                showRenewalPrompt = true
+            }
+        }
+        .sheet(isPresented: $showRenewalPrompt) {
+            if let expiredSubscription = subscriptionViewModel.currentSubscription {
+                RenewalPromptView(expiredSubscription: expiredSubscription)
+                    .environmentObject(subscriptionViewModel)
+            }
         }
     }
 }

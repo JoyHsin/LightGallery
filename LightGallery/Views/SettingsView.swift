@@ -11,37 +11,69 @@ struct SettingsView: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("notificationsEnabled") private var notificationsEnabled = true
+    @StateObject private var featureAccessManager = FeatureAccessManager.shared
+    @State private var showSubscriptionView = false
+    @State private var showProfileView = false
     
     var body: some View {
         NavigationStack {
             List {
                 // Profile Section
                 Section {
-                    HStack(spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.gray.opacity(0.2))
-                                .frame(width: 60, height: 60)
-                            Image(systemName: "person.fill")
-                                .font(.title)
-                                .foregroundColor(.gray)
+                    Button {
+                        showProfileView = true
+                    } label: {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.blue.opacity(0.2))
+                                    .frame(width: 60, height: 60)
+                                Image(systemName: "person.fill")
+                                    .font(.title)
+                                    .foregroundColor(.blue)
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(getCurrentUserName())
+                                    .font(.title3)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.primary)
+                                Text(getCurrentSubscriptionStatus())
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
                         }
-                        
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("LightGallery Pro")
-                                .font(.title3)
-                                .fontWeight(.bold)
-                            Text("Upgrade Plan".localized)
-                                .font(.subheadline)
-                                .foregroundColor(.blue)
-                        }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.secondary)
+                        .padding(.vertical, 8)
                     }
-                    .padding(.vertical, 8)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    // Subscription Management
+                    Button {
+                        showSubscriptionView = true
+                    } label: {
+                        HStack {
+                            Label("升级套餐", systemImage: "crown.fill")
+                                .foregroundColor(.orange)
+                            Spacer()
+                            if featureAccessManager.getCurrentTier() != .free {
+                                Text("管理订阅")
+                                    .font(.subheadline)
+                                    .foregroundColor(.blue)
+                            } else {
+                                Text("升级")
+                                    .font(.subheadline)
+                                    .foregroundColor(.blue)
+                            }
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
                 
                 // Preferences
@@ -106,6 +138,31 @@ struct SettingsView: View {
             .navigationTitle("Settings".localized)
         }
         .preferredColorScheme(isDarkMode ? .dark : .light)
+        .sheet(isPresented: $showSubscriptionView) {
+            SubscriptionView()
+        }
+        .sheet(isPresented: $showProfileView) {
+            ProfileView()
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func getCurrentUserName() -> String {
+        // TODO: Get from AuthenticationService
+        return "LightGallery 用户"
+    }
+    
+    private func getCurrentSubscriptionStatus() -> String {
+        let tier = featureAccessManager.getCurrentTier()
+        switch tier {
+        case .free:
+            return "免费版用户"
+        case .pro:
+            return "专业版用户"
+        case .max:
+            return "旗舰版用户"
+        }
     }
 }
 

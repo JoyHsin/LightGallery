@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:lightgallery}?useSSL=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+# Production logging
+logging:
+  level:
+    root: WARN
+    com.lightgallery.backend: INFO
+
+# Enable SSL in production with TLS 1.2+ enforcement
+# Requirement: 10.2
+server:
+  ssl:
+    enabled: true
+    key-store: ${SSL_KEY_STORE:classpath:keystore.p12}
+    key-store-password: ${SSL_KEY_STORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: ${SSL_KEY_ALIAS:lightgallery}
+    # Enforce TLS 1.2 and above
+    enabled-protocols: TLSv1.2,TLSv1.3
+    # Use strong cipher suites only
+    ciphers: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384

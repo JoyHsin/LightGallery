@@ -424,6 +424,23 @@ class MockPhotoService: PhotoServiceProtocol {
     func getPhotoCreationDate(_ asset: PhotoAsset) -> Date? {
         return asset.creationDate
     }
+    
+    func deletePhotos(_ assets: [PhotoAsset]) async throws {
+        // Mock implementation
+    }
+    
+    func fetchScreenshots() async throws -> [PhotoAsset] {
+        try await ensurePhotoLibraryAccess()
+        return []
+    }
+    
+    func fetchUserAlbums() -> [PHAssetCollection] {
+        return []
+    }
+    
+    func addAssetToAlbum(asset: PHAsset, album: PHAssetCollection) async throws {
+        // Mock implementation
+    }
 }
 
 // MARK: - Enhanced Mock PhotoService with Test Data
@@ -495,6 +512,28 @@ class MockPhotoServiceWithData: PhotoServiceProtocol {
     
     func getPhotoCreationDate(_ asset: PhotoAsset) -> Date? {
         return asset.creationDate
+    }
+    
+    func deletePhotos(_ assets: [PhotoAsset]) async throws {
+        try await ensurePhotoLibraryAccess()
+        for asset in assets {
+            if asset.localIdentifier == "fail-delete-test" {
+                throw PhotoError.deletionFailed("Mock deletion failure")
+            }
+        }
+    }
+    
+    func fetchScreenshots() async throws -> [PhotoAsset] {
+        try await ensurePhotoLibraryAccess()
+        return mockPhotos
+    }
+    
+    func fetchUserAlbums() -> [PHAssetCollection] {
+        return []
+    }
+    
+    func addAssetToAlbum(asset: PHAsset, album: PHAssetCollection) async throws {
+        try await ensurePhotoLibraryAccess()
     }
 }
 

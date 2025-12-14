@@ -74,6 +74,24 @@ struct SwipeGestureTests {
         func getPhotoCreationDate(_ asset: PhotoAsset) -> Date? {
             return asset.creationDate
         }
+        
+        func deletePhotos(_ assets: [PhotoAsset]) async throws {
+            try await ensurePhotoLibraryAccess()
+            deletedAssets.append(contentsOf: assets)
+        }
+        
+        func fetchScreenshots() async throws -> [PhotoAsset] {
+            try await ensurePhotoLibraryAccess()
+            return mockPhotos
+        }
+        
+        func fetchUserAlbums() -> [PHAssetCollection] {
+            return []
+        }
+        
+        func addAssetToAlbum(asset: PHAsset, album: PHAssetCollection) async throws {
+            try await ensurePhotoLibraryAccess()
+        }
     }
     
     // MARK: - Swipe Direction Tests

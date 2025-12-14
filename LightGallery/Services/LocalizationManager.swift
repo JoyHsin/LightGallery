@@ -148,7 +148,6 @@ class LocalizationManager: ObservableObject {
         "Paste Link to Download": "粘贴链接下载",
         "Supports Instagram, TikTok, X, etc.": "支持小红书、抖音、微博、X 等",
         "Paste link here...": "在此粘贴链接...",
-        "Processing...": "处理中...",
         "Download without Watermark": "无水印下载",
         "Supported Platforms": "支持平台",
         "Invalid URL": "无效链接",
@@ -216,7 +215,40 @@ class LocalizationManager: ObservableObject {
         "photos selected": "张照片已选择",
         "Select Photos": "选择照片",
         "Convert & Save": "转换并保存",
-        "Converted photos saved to Camera Roll": "转换后的照片已保存到相册"
+        "Converted photos saved to Camera Roll": "转换后的照片已保存到相册",
+        
+        // ID Photo Maker
+        "ID Photo Maker": "智能证件照",
+        "Smart ID Photo": "智能证件照",
+        "Create compliant ID photos": "制作标准证件照",
+        "Create Professional ID Photos": "制作专业证件照",
+        "Automatically remove background, center face, and export compliant photos.": "自动去除背景、人脸居中，导出标准证件照。",
+        "Choose from Library": "从相册选择",
+        "Take Selfie": "拍摄自拍",
+        "Analyzing...": "正在分析...",
+        "Size": "尺寸",
+        "Background Color": "背景颜色",
+        "Retake": "重拍",
+        "Save to Photos": "保存到相册",
+        "Photo saved to Camera Roll.": "照片已保存到相册。",
+        "Failed to process photo. Please try a clearer selfie.": "处理失败，请尝试拍摄更清晰的自拍。",
+        "Failed to save photo.": "保存失败。",
+        "Center your face in the oval": "请将面部对准椭圆框",
+        "1 Inch": "1寸",
+        "2 Inch": "2寸",
+        "Passport": "护照",
+        "White": "白色",
+        "Blue": "蓝色",
+        "Red": "红色",
+        "Gray": "灰色",
+        
+        // Camera & Workflow
+        "Reselect": "重选",
+        "Use Photo": "使用照片",
+        "Camera Access": "相机权限",
+        "Camera is not available on this device.": "此设备上无法使用相机。",
+        "Please enable camera access in Settings.": "请在设置中开启相机权限。",
+        "Processing...": "处理中..."
     ]
     
     // Dictionary for Traditional Chinese
@@ -387,7 +419,39 @@ class LocalizationManager: ObservableObject {
         "photos selected": "張照片已選擇",
         "Select Photos": "選擇照片",
         "Convert & Save": "轉換並保存",
-        "Converted photos saved to Camera Roll": "轉換後的照片已保存到相簿"
+        "Converted photos saved to Camera Roll": "轉換後的照片已保存到相簿",
+        
+        // ID Photo Maker
+        "ID Photo Maker": "智能證件照",
+        "Smart ID Photo": "智能證件照",
+        "Create compliant ID photos": "製作標準證件照",
+        "Create Professional ID Photos": "製作專業證件照",
+        "Automatically remove background, center face, and export compliant photos.": "自動去除背景、人臉居中，導出標準證件照。",
+        "Choose from Library": "從相簿選擇",
+        "Take Selfie": "拍攝自拍",
+        "Analyzing...": "正在分析...",
+        "Size": "尺寸",
+        "Background Color": "背景顏色",
+        "Retake": "重拍",
+        "Save to Photos": "保存到相簿",
+        "Photo saved to Camera Roll.": "照片已保存到相簿。",
+        "Failed to process photo. Please try a clearer selfie.": "處理失敗，請嘗試拍攝更清晰的自拍。",
+        "Failed to save photo.": "保存失敗。",
+        "Center your face in the oval": "請將面部對準橢圓框",
+        "1 Inch": "1寸",
+        "2 Inch": "2寸",
+        "Passport": "護照",
+        "White": "白色",
+        "Blue": "藍色",
+        "Red": "紅色",
+        "Gray": "灰色",
+        
+        // Camera & Workflow
+        "Reselect": "重選",
+        "Use Photo": "使用照片",
+        "Camera Access": "相機權限",
+        "Camera is not available on this device.": "此設備上無法使用相機。",
+        "Please enable camera access in Settings.": "請在設定中開啟相機權限。"
     ]
 }
 
