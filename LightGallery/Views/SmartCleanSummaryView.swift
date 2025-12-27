@@ -64,6 +64,14 @@ struct SmartCleanSummaryView: View {
                         dismiss()
                     }
                 }
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        viewModel.rescan()
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                    }
+                    .disabled(viewModel.isLoading)
+                }
             }
             .onAppear {
                 // Check access before scanning

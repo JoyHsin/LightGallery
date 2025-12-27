@@ -26,7 +26,7 @@ class DuplicatesViewModel: ObservableObject {
     func mergeGroup(_ group: DuplicateGroup) {
         // Simple Merge: Keep the first one, delete the rest
         // In a real app, we might check for "Favorite" status or highest resolution
-        guard let keepAsset = group.assets.first else { return }
+        guard group.assets.first != nil else { return }
         let deleteAssets = group.assets.dropFirst().map { $0.phAsset }
         
         performDelete(assets: Array(deleteAssets)) { success in

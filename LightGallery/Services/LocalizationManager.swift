@@ -248,7 +248,28 @@ class LocalizationManager: ObservableObject {
         "Camera Access": "相机权限",
         "Camera is not available on this device.": "此设备上无法使用相机。",
         "Please enable camera access in Settings.": "请在设置中开启相机权限。",
-        "Processing...": "处理中..."
+        "Processing...": "处理中...",
+
+        // Blurry Photos
+        "Blurry": "模糊照片",
+        "Blurry Photos": "模糊照片",
+        "Out of focus": "对焦失败",
+        "Analyzing photos...": "正在分析照片...",
+        "This may take a moment": "这可能需要一点时间",
+        "All Clear!": "全部清晰！",
+        "No blurry photos found.": "没有发现模糊照片。",
+        "blurry photos": "张模糊照片",
+        "selected": "已选择",
+        "Space to Free": "可释放空间",
+        "Delete Blurry Photos?": "删除模糊照片？",
+        "Very Blurry": "非常模糊",
+        "Slightly Blurry": "轻微模糊",
+
+        // Large Files
+        "Large Files": "大文件",
+        "Large photos and videos": "大照片和视频",
+        "items": "项",
+        "Scanning library...": "正在扫描相册..."
     ]
     
     // Dictionary for Traditional Chinese
@@ -351,7 +372,6 @@ class LocalizationManager: ObservableObject {
         "Paste Link to Download": "貼上連結下載",
         "Supports Instagram, TikTok, X, etc.": "支持小紅書、抖音、微博、X 等",
         "Paste link here...": "在此貼上連結...",
-        "Processing...": "處理中...",
         "Download without Watermark": "無水印下載",
         "Supported Platforms": "支持平台",
         "Invalid URL": "無效連結",
@@ -451,7 +471,29 @@ class LocalizationManager: ObservableObject {
         "Use Photo": "使用照片",
         "Camera Access": "相機權限",
         "Camera is not available on this device.": "此設備上無法使用相機。",
-        "Please enable camera access in Settings.": "請在設定中開啟相機權限。"
+        "Please enable camera access in Settings.": "請在設定中開啟相機權限。",
+        "Processing...": "處理中...",
+
+        // Blurry Photos
+        "Blurry": "模糊照片",
+        "Blurry Photos": "模糊照片",
+        "Out of focus": "對焦失敗",
+        "Analyzing photos...": "正在分析照片...",
+        "This may take a moment": "這可能需要一點時間",
+        "All Clear!": "全部清晰！",
+        "No blurry photos found.": "沒有發現模糊照片。",
+        "blurry photos": "張模糊照片",
+        "selected": "已選擇",
+        "Space to Free": "可釋放空間",
+        "Delete Blurry Photos?": "刪除模糊照片？",
+        "Very Blurry": "非常模糊",
+        "Slightly Blurry": "輕微模糊",
+
+        // Large Files
+        "Large Files": "大檔案",
+        "Large photos and videos": "大照片和影片",
+        "items": "項",
+        "Scanning library...": "正在掃描相簿..."
     ]
 }
 

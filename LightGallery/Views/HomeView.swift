@@ -13,7 +13,7 @@ struct HomeView: View {
     @State private var showSmartClean = false
     @State private var showScreenshots = false
     @State private var showDuplicates = false
-    @State private var showSimilar = false
+    @State private var showBlurry = false
     
     @State private var screenshotCount: Int = 0
     @State private var photoLibrarySize: String = "--"
@@ -68,14 +68,14 @@ struct HomeView: View {
                             showDuplicates = true
                         }
                         
-                        // Similar
+                        // Blurry
                         QuickActionCard(
-                            title: "Similar".localized,
-                            subtitle: "Review groups".localized,
-                            iconName: "photo.on.rectangle.angled",
+                            title: "Blurry".localized,
+                            subtitle: "Out of focus".localized,
+                            iconName: "camera.metering.unknown",
                             iconBackground: .purple
                         ) {
-                            showSimilar = true
+                            showBlurry = true
                         }
                     }
                     .padding(.horizontal)
@@ -93,8 +93,8 @@ struct HomeView: View {
             .sheet(isPresented: $showScreenshots) {
                 ScreenshotCleanupView()
             }
-            .sheet(isPresented: $showSimilar) {
-                SimilarPhotosCleanupView()
+            .sheet(isPresented: $showBlurry) {
+                BlurryPhotosView()
             }
             .sheet(isPresented: $showDuplicates) {
                 DuplicatesView()
@@ -106,56 +106,46 @@ struct HomeView: View {
     }
     
     private func loadStats() async {
-            // 1. Load screenshot count
-            let screenshotOptions = PHFetchOptions()
-            screenshotOptions.predicate = NSPredicate(format: "mediaSubtype == %d", PHAssetMediaSubtype.photoScreenshot.rawValue)
-            let screenshots = PHAsset.fetchAssets(with: .image, options: screenshotOptions)
+        // 1. Load screenshot count
+        let screenshotOptions = PHFetchOptions()
+        screenshotOptions.predicate = NSPredicate(format: "mediaSubtype == %d", PHAssetMediaSubtype.photoScreenshot.rawValue)
+        let screenshots = PHAsset.fetchAssets(with: .image, options: screenshotOptions)
+        
+        // 2. Calculate Storage Stats
+        var totalPhotoSize: Int64 = 0
+        var thisWeekSize: Int64 = 0
+        let calendar = Calendar.current
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) ?? Date()
+        
+        // Fetch all assets to calculate size (Estimate)
+        let allAssets = PHAsset.fetchAssets(with: .image, options: nil)
+        
+        allAssets.enumerateObjects { asset, _, _ in
+            let estimatedSize: Int64 = 2 * 1024 * 1024 // 2MB default
+            totalPhotoSize += estimatedSize
             
-            // 2. Calculate Storage Stats
-            var totalPhotoSize: Int64 = 0
-            var thisWeekSize: Int64 = 0
-            let calendar = Calendar.current
-            let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) ?? Date()
-            
-            // Fetch all assets to calculate size (Estimate)
-            // Note: Exact size requires PHAssetResource which is slow for all assets.
-            // We will use a statistical estimate based on pixel count or a sample.
-            // For better accuracy in a real app, we would cache this or run in background.
-            let allAssets = PHAsset.fetchAssets(with: .image, options: nil)
-            
-            allAssets.enumerateObjects { asset, _, _ in
-                // Rough estimate: 0.5 MB per megapixel? Or just fixed avg?
-                // Let's use a slightly better heuristic: (Width * Height * 4 bytes) / compression factor (e.g. 10)
-                // JPEG compression varies wildly. Let's assume avg 2.5MB per photo for simplicity if resource fetch is too heavy.
-                // Or better: fetch resource for a few and average.
-                // For this demo, we'll use a fixed estimate per asset type to be fast.
-                let estimatedSize: Int64 = 2 * 1024 * 1024 // 2MB default
-                
-                totalPhotoSize += estimatedSize
-                
-                if let date = asset.creationDate, date >= startOfWeek {
-                    thisWeekSize += estimatedSize
-                }
+            if let date = asset.creationDate, date >= startOfWeek {
+                thisWeekSize += estimatedSize
             }
-            
-
-            // 3. System Storage
-            var usedDisk: Int64 = 0
-            var totalDisk: Int64 = 0
-            
-            let fileURL = URL(fileURLWithPath: NSHomeDirectory())
-            do {
-                let values = try fileURL.resourceValues(forKeys: [.volumeTotalCapacityKey, .volumeAvailableCapacityForImportantUsageKey])
-                if let capacity = values.volumeTotalCapacity,
-                   let available = values.volumeAvailableCapacityForImportantUsage {
-                    let capacity64 = Int64(capacity)
-                    totalDisk = capacity64
-                    usedDisk = capacity64 - available
-                }
-            } catch {
-                print("Error retrieving storage info: \(error)")
+        }
+        
+        // 3. System Storage
+        var usedDisk: Int64 = 0
+        var totalDisk: Int64 = 0
+        
+        let fileURL = URL(fileURLWithPath: NSHomeDirectory())
+        do {
+            let values = try fileURL.resourceValues(forKeys: [.volumeTotalCapacityKey, .volumeAvailableCapacityForImportantUsageKey])
+            if let capacity = values.volumeTotalCapacity,
+               let available = values.volumeAvailableCapacityForImportantUsage {
+                let capacity64 = Int64(capacity)
+                totalDisk = capacity64
+                usedDisk = capacity64 - available
             }
-            
+        } catch {
+            print("Error retrieving storage info: \(error)")
+        }
+        
         // Update UI
         await MainActor.run {
             self.screenshotCount = screenshots.count
