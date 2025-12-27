@@ -361,6 +361,9 @@ struct PhotoThumbnailView: View {
     let onTap: () -> Void
 
     @State private var image: UIImage?
+    @State private var isLoaded = false
+
+    private let cacheManager = ImageCacheManager.shared
 
     var body: some View {
         GeometryReader { geo in
@@ -371,9 +374,15 @@ struct PhotoThumbnailView: View {
                         .aspectRatio(contentMode: .fill)
                         .frame(width: geo.size.width, height: geo.size.width)
                         .clipped()
+                        .opacity(isLoaded ? 1 : 0.5)
+                        .animation(.easeIn(duration: 0.2), value: isLoaded)
                 } else {
                     Rectangle()
-                        .fill(Color.gray.opacity(0.3))
+                        .fill(Color.gray.opacity(0.2))
+                        .overlay {
+                            ProgressView()
+                                .scaleEffect(0.6)
+                        }
                 }
 
                 // 视频标识
@@ -433,21 +442,21 @@ struct PhotoThumbnailView: View {
         .onAppear {
             loadImage()
         }
+        .onDisappear {
+            // 取消加载请求（如果还在加载中）
+            if !isLoaded {
+                cacheManager.cancelRequest(for: asset.localIdentifier)
+            }
+        }
     }
 
     private func loadImage() {
-        let manager = PHImageManager.default()
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .opportunistic
-        options.resizeMode = .fast
-
-        manager.requestImage(
-            for: asset,
-            targetSize: CGSize(width: 300, height: 300),
-            contentMode: .aspectFill,
-            options: options
-        ) { result, _ in
-            self.image = result
+        // 使用缓存管理器加载缩略图
+        cacheManager.loadThumbnail(for: asset) { loadedImage in
+            if let loadedImage = loadedImage {
+                self.image = loadedImage
+                self.isLoaded = true
+            }
         }
     }
 

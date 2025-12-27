@@ -2,7 +2,7 @@
 //  PhotoDetailView.swift
 //  LightGallery
 //
-//  全屏图片查看器 - 支持缩放、左右滑动切换
+//  全屏图片查看器 - 支持缩放、左右滑动切换、渐进式加载、预加载
 //
 
 import SwiftUI
@@ -15,10 +15,8 @@ struct PhotoDetailView: View {
 
     @State private var showControls = true
     @State private var showDeleteConfirm = false
-    @State private var currentScale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+
+    private let cacheManager = ImageCacheManager.shared
 
     var body: some View {
         ZStack {
@@ -38,6 +36,10 @@ struct PhotoDetailView: View {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     showControls.toggle()
                 }
+            }
+            .onChange(of: selectedIndex) { _, newIndex in
+                // 预加载相邻图片
+                cacheManager.preloadAdjacentImages(currentIndex: newIndex, assets: assets, range: 2)
             }
 
             // 顶部导航栏
@@ -123,23 +125,22 @@ struct PhotoDetailView: View {
         } message: {
             Text("此操作无法撤销")
         }
+        .onAppear {
+            // 初始预加载
+            cacheManager.preloadAdjacentImages(currentIndex: selectedIndex, assets: assets, range: 2)
+        }
+        .onDisappear {
+            // 清理不需要的缓存
+            cacheManager.cancelAllRequests()
+        }
     }
 
     private func sharePhoto() {
         guard selectedIndex < assets.count else { return }
         let asset = assets[selectedIndex]
 
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-
-        PHImageManager.default().requestImage(
-            for: asset,
-            targetSize: PHImageManagerMaximumSize,
-            contentMode: .aspectFit,
-            options: options
-        ) { image, _ in
-            guard let image = image else { return }
+        cacheManager.loadHighQualityImage(for: asset) { image, isFinal in
+            guard isFinal, let image = image else { return }
 
             DispatchQueue.main.async {
                 let activityVC = UIActivityViewController(
@@ -177,99 +178,159 @@ struct PhotoDetailView: View {
     }
 }
 
-// MARK: - 可缩放的图片视图
+// MARK: - 可缩放的图片视图（带渐进式加载）
 struct ZoomablePhotoView: View {
     let asset: PHAsset
 
-    @State private var image: UIImage?
+    @State private var thumbnailImage: UIImage?
+    @State private var highQualityImage: UIImage?
+    @State private var isLoadingHighQuality = false
+    @State private var loadProgress: Double = 0
+
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var offset: CGSize = .zero
     @State private var lastOffset: CGSize = .zero
 
+    private let cacheManager = ImageCacheManager.shared
+
+    /// 当前显示的图片（优先高清图）
+    private var displayImage: UIImage? {
+        highQualityImage ?? thumbnailImage
+    }
+
     var body: some View {
         GeometryReader { geometry in
-            if let image = image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .scaleEffect(scale)
-                    .offset(offset)
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .gesture(
-                        MagnificationGesture()
-                            .onChanged { value in
-                                let delta = value / lastScale
-                                lastScale = value
-                                scale = min(max(scale * delta, 1), 4)
-                            }
-                            .onEnded { _ in
-                                lastScale = 1.0
-                                if scale < 1 {
-                                    withAnimation(.spring()) {
-                                        scale = 1
-                                        offset = .zero
-                                    }
-                                }
-                            }
-                    )
-                    .simultaneousGesture(
-                        DragGesture()
-                            .onChanged { value in
+            ZStack {
+                if let image = displayImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .scaleEffect(scale)
+                        .offset(offset)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .gesture(magnificationGesture)
+                        .simultaneousGesture(dragGesture)
+                        .onTapGesture(count: 2) {
+                            withAnimation(.spring()) {
                                 if scale > 1 {
-                                    offset = CGSize(
-                                        width: lastOffset.width + value.translation.width,
-                                        height: lastOffset.height + value.translation.height
-                                    )
+                                    scale = 1
+                                    offset = .zero
+                                    lastOffset = .zero
+                                } else {
+                                    scale = 2
                                 }
-                            }
-                            .onEnded { _ in
-                                lastOffset = offset
-                            }
-                    )
-                    .onTapGesture(count: 2) {
-                        withAnimation(.spring()) {
-                            if scale > 1 {
-                                scale = 1
-                                offset = .zero
-                                lastOffset = .zero
-                            } else {
-                                scale = 2
                             }
                         }
+                        // 高清图加载完成时的淡入效果
+                        .opacity(highQualityImage != nil ? 1 : 0.8)
+                        .animation(.easeIn(duration: 0.3), value: highQualityImage != nil)
+                } else {
+                    // 加载中占位
+                    VStack(spacing: 16) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .scaleEffect(1.5)
+
+                        if isLoadingHighQuality && loadProgress > 0 {
+                            Text("\(Int(loadProgress * 100))%")
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.7))
+                        }
                     }
-            } else {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
                     .frame(width: geometry.size.width, height: geometry.size.height)
+                }
+
+                // 加载高清图进度指示器（仅在有缩略图但还在加载高清图时显示）
+                if thumbnailImage != nil && highQualityImage == nil && isLoadingHighQuality {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(0.8)
+                                .padding(8)
+                                .background(Color.black.opacity(0.5))
+                                .cornerRadius(8)
+                                .padding()
+                        }
+                    }
+                }
             }
         }
         .onAppear {
-            loadHighQualityImage()
+            loadImages()
+        }
+        .onDisappear {
+            // 重置缩放状态
+            scale = 1.0
+            lastScale = 1.0
+            offset = .zero
+            lastOffset = .zero
         }
     }
 
-    private func loadHighQualityImage() {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-        options.isSynchronous = false
+    // MARK: - 手势
 
-        let targetSize = CGSize(
-            width: UIScreen.main.bounds.width * UIScreen.main.scale,
-            height: UIScreen.main.bounds.height * UIScreen.main.scale
-        )
-
-        PHImageManager.default().requestImage(
-            for: asset,
-            targetSize: targetSize,
-            contentMode: .aspectFit,
-            options: options
-        ) { result, info in
-            if let result = result {
-                DispatchQueue.main.async {
-                    self.image = result
+    private var magnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { value in
+                let delta = value / lastScale
+                lastScale = value
+                scale = min(max(scale * delta, 1), 4)
+            }
+            .onEnded { _ in
+                lastScale = 1.0
+                if scale < 1 {
+                    withAnimation(.spring()) {
+                        scale = 1
+                        offset = .zero
+                    }
                 }
+            }
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if scale > 1 {
+                    offset = CGSize(
+                        width: lastOffset.width + value.translation.width,
+                        height: lastOffset.height + value.translation.height
+                    )
+                }
+            }
+            .onEnded { _ in
+                lastOffset = offset
+            }
+    }
+
+    // MARK: - 图片加载
+
+    private func loadImages() {
+        // 1. 先加载缩略图（快速显示）
+        cacheManager.loadThumbnail(for: asset) { image in
+            if let image = image {
+                self.thumbnailImage = image
+            }
+        }
+
+        // 2. 加载高清图（渐进式）
+        isLoadingHighQuality = true
+        cacheManager.loadHighQualityImage(
+            for: asset,
+            progressHandler: { progress in
+                self.loadProgress = progress
+            }
+        ) { image, isFinal in
+            if let image = image {
+                if isFinal {
+                    self.highQualityImage = image
+                    self.isLoadingHighQuality = false
+                }
+            } else if isFinal {
+                self.isLoadingHighQuality = false
             }
         }
     }
