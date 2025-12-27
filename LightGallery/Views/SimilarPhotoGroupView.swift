@@ -9,9 +9,10 @@ import SwiftUI
 import Photos
 
 struct SimilarPhotoGroupView: View {
+    @EnvironmentObject var localizationManager: LocalizationManager
     @Binding var group: SimilarPhotoGroup
     var onMerge: () -> Void
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
@@ -20,7 +21,7 @@ struct SimilarPhotoGroupView: View {
                     Text(groupDateString)
                         .font(.headline)
                         .foregroundColor(.primary)
-                    Text("\(group.assets.count) 张照片")
+                    Text("\(group.assets.count) " + "photos".localized)
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
@@ -30,7 +31,7 @@ struct SimilarPhotoGroupView: View {
                 Button(action: {
                     onMerge()
                 }) {
-                    Text("合并")
+                    Text("Merge".localized)
                         .font(.subheadline)
                         .fontWeight(.medium)
                         .foregroundColor(.blue)
@@ -79,7 +80,8 @@ struct SimilarPhotoGroupView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        formatter.locale = Locale(identifier: "zh_CN")
+        let localeIdentifier = (localizationManager.language == .simplifiedChinese || localizationManager.language == .traditionalChinese) ? "zh_CN" : "en_US"
+        formatter.locale = Locale(identifier: localeIdentifier)
         return formatter.string(from: first.creationDate)
     }
     
