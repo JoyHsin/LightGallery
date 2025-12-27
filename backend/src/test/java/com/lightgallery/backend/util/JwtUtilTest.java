@@ -1,4 +1,4 @@
-package com.lightgallery.backend.util;
+package com.declutter.backend.util;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

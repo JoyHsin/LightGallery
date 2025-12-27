@@ -1,6 +1,6 @@
-package com.lightgallery.backend.controller;
+package com.declutter.backend.controller;
 
-import com.lightgallery.backend.dto.ApiResponse;
+import com.declutter.backend.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -41,7 +41,7 @@ public class HealthController {
                                       "data": {
                                         "status": "UP",
                                         "timestamp": "2024-12-07T10:00:00",
-                                        "service": "lightgallery-backend"
+                                        "service": "declutter-backend"
                                       }
                                     }
                                     """)
@@ -53,7 +53,7 @@ public class HealthController {
         Map<String, Object> health = new HashMap<>();
         health.put("status", "UP");
         health.put("timestamp", LocalDateTime.now());
-        health.put("service", "lightgallery-backend");
+        health.put("service", "declutter-backend");
         
         return ApiResponse.success(health);
     }

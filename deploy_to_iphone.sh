@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=========================================="
-echo "LightGallery - 部署到 iPhone"
+echo "Declutter - 部署到 iPhone"
 echo "=========================================="
 echo ""
 
@@ -32,15 +32,15 @@ echo ""
 
 # 清理并构建
 xcodebuild clean \
-    -project LightGallery.xcodeproj \
-    -scheme LightGallery \
+    -project Declutter.xcodeproj \
+    -scheme Declutter \
     -destination "platform=iOS,id=$DEVICE_ID" \
     > /dev/null 2>&1
 
 # 构建并安装到设备
 xcodebuild build \
-    -project LightGallery.xcodeproj \
-    -scheme LightGallery \
+    -project Declutter.xcodeproj \
+    -scheme Declutter \
     -destination "platform=iOS,id=$DEVICE_ID" \
     -configuration Debug
 

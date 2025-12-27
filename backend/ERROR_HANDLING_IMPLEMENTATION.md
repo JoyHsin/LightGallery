@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the implementation of global exception handling and audit logging for the LightGallery backend service.
+This document describes the implementation of global exception handling and audit logging for the Declutter backend service.
 
 **Requirements Addressed:**
 - 1.5: Authentication error handling

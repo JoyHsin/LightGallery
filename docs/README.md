@@ -1,4 +1,4 @@
-# LightGallery 文档中心
+# Declutter 文档中心
 
 > 项目文档分类索引
 
@@ -57,4 +57,4 @@
 
 - [项目根目录](../)
 - [后端文档](../backend/)
-- [iOS 项目](../LightGallery/)
+- [iOS 项目](../Declutter/)

@@ -1,4 +1,4 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
 import net.jqwik.api.*;
 import org.junit.jupiter.api.Test;

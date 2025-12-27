@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide covers the complete setup and testing of Apple In-App Purchases (IAP) for the LightGallery iOS app, including sandbox testing and production configuration.
+This guide covers the complete setup and testing of Apple In-App Purchases (IAP) for the Declutter iOS app, including sandbox testing and production configuration.
 
 ## Prerequisites
 
@@ -10,7 +10,7 @@ This guide covers the complete setup and testing of Apple In-App Purchases (IAP)
 - Xcode 15.0 or higher
 - iOS device for testing (simulator has limitations)
 - App Store Connect access
-- Bundle ID: `joyhisn.LightGallery`
+- Bundle ID: `joyhisn.Declutter`
 - Team ID: `P9NDD6BA8Q`
 
 ## 1. App Store Connect Configuration
@@ -21,9 +21,9 @@ This guide covers the complete setup and testing of Apple In-App Purchases (IAP)
 2. Navigate to: **My Apps** → **+** → **New App**
 3. Fill in app information:
    - **Platform**: iOS
-   - **Name**: LightGallery
+   - **Name**: Declutter
    - **Primary Language**: Chinese (Simplified)
-   - **Bundle ID**: joyhisn.LightGallery
+   - **Bundle ID**: joyhisn.Declutter
    - **SKU**: lightgallery-ios-001
 
 ### 1.2 Configure In-App Purchases
@@ -33,8 +33,8 @@ Navigate to: **App** → **Features** → **In-App Purchases**
 #### Create Subscription Group
 
 1. Click **+** next to "Subscription Groups"
-2. **Reference Name**: LightGallery Subscriptions
-3. **Group Display Name** (Chinese): LightGallery 订阅服务
+2. **Reference Name**: Declutter Subscriptions
+3. **Group Display Name** (Chinese): Declutter 订阅服务
 
 #### Create Subscription Products
 
@@ -123,15 +123,15 @@ Navigate to: **App** → **Features** → **In-App Purchases**
 
 ### 2.1 Enable In-App Purchase Capability
 
-1. Open `LightGallery.xcodeproj` in Xcode
-2. Select **LightGallery** target
+1. Open `Declutter.xcodeproj` in Xcode
+2. Select **Declutter** target
 3. Go to **Signing & Capabilities** tab
 4. Click **+ Capability**
 5. Add **In-App Purchase**
 
 ### 2.2 Update Entitlements
 
-Update `LightGallery/LightGallery.entitlements`:
+Update `Declutter/Declutter.entitlements`:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -152,7 +152,7 @@ Update `LightGallery/LightGallery.entitlements`:
 
 ### 2.3 Update Product IDs
 
-Verify product IDs in `LightGallery/Services/Subscription/AppleIAPManager.swift`:
+Verify product IDs in `Declutter/Services/Subscription/AppleIAPManager.swift`:
 
 ```swift
 private let productIds: Set<String> = [
@@ -165,7 +165,7 @@ private let productIds: Set<String> = [
 
 ### 2.4 Configure Backend API URL
 
-Update for production in `LightGallery/Services/BackendAPIClient.swift`:
+Update for production in `Declutter/Services/BackendAPIClient.swift`:
 
 ```swift
 // Development
@@ -236,13 +236,13 @@ For testing without App Store Connect:
 
 1. In Xcode: **File** → **New** → **File**
 2. Select **StoreKit Configuration File**
-3. Name it: `LightGallery.storekit`
+3. Name it: `Declutter.storekit`
 4. Add products (see DEPLOYMENT_GUIDE.md for full JSON)
 
 5. Enable StoreKit configuration:
    - **Product** → **Scheme** → **Edit Scheme**
    - **Run** → **Options**
-   - **StoreKit Configuration**: Select `LightGallery.storekit`
+   - **StoreKit Configuration**: Select `Declutter.storekit`
 
 ## 4. Sandbox Testing Procedures
 
@@ -350,7 +350,7 @@ LIMIT 1;
 **Steps**:
 1. Purchase a subscription
 2. Go to Settings → [Your Name] → Subscriptions
-3. Select LightGallery subscription
+3. Select Declutter subscription
 4. Tap "Cancel Subscription"
 5. Confirm cancellation
 6. Return to app
@@ -658,4 +658,4 @@ WHERE created_at > NOW() - INTERVAL 30 DAY;
 
 **Last Updated**: December 2024
 **Version**: 1.0
-**Maintained By**: LightGallery Development Team
+**Maintained By**: Declutter Development Team

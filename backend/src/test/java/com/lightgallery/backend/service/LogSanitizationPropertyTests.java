@@ -1,4 +1,4 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
 import net.jqwik.api.*;
 import org.junit.jupiter.api.BeforeEach;

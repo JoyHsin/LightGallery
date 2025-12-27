@@ -1,6 +1,6 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
-import com.lightgallery.backend.dto.PaymentVerificationRequest;
+import com.declutter.backend.dto.PaymentVerificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

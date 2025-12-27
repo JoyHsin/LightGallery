@@ -1,12 +1,12 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
-import com.lightgallery.backend.dto.AuthResponse;
-import com.lightgallery.backend.dto.OAuthExchangeRequest;
-import com.lightgallery.backend.entity.AuthToken;
-import com.lightgallery.backend.entity.User;
-import com.lightgallery.backend.mapper.AuthTokenMapper;
-import com.lightgallery.backend.mapper.UserMapper;
-import com.lightgallery.backend.util.JwtUtil;
+import com.declutter.backend.dto.AuthResponse;
+import com.declutter.backend.dto.OAuthExchangeRequest;
+import com.declutter.backend.entity.AuthToken;
+import com.declutter.backend.entity.User;
+import com.declutter.backend.mapper.AuthTokenMapper;
+import com.declutter.backend.mapper.UserMapper;
+import com.declutter.backend.util.JwtUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

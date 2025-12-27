@@ -1,7 +1,7 @@
-package com.lightgallery.backend.mapper;
+package com.declutter.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lightgallery.backend.entity.User;
+import com.declutter.backend.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

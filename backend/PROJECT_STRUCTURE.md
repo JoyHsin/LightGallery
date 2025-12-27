@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the structure and organization of the LightGallery backend service.
+This document describes the structure and organization of the Declutter backend service.
 
 ## Directory Structure
 

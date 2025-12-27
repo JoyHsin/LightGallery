@@ -1,4 +1,4 @@
-package com.lightgallery.backend.exception;
+package com.declutter.backend.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +28,9 @@ public class GlobalExceptionHandler {
      * Handle authentication exceptions
      * Requirements: 1.5
      */
-    @ExceptionHandler(com.lightgallery.backend.exception.AuthenticationException.class)
+    @ExceptionHandler(com.declutter.backend.exception.AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(
-            com.lightgallery.backend.exception.AuthenticationException ex,
+            com.declutter.backend.exception.AuthenticationException ex,
             HttpServletRequest request) {
         
         log.error("Authentication error: provider={}, errorCode={}, message={}", 

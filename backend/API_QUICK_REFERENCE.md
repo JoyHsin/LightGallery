@@ -1,4 +1,4 @@
-# LightGallery API Quick Reference
+# Declutter API Quick Reference
 
 ## Base URLs
 - **Development**: `http://localhost:8080/api/v1`

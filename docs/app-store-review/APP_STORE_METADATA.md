@@ -1,4 +1,4 @@
-# LightGallery App Store 元数据
+# Declutter App Store 元数据
 
 > 用于 App Store Connect 提交的元数据
 
@@ -6,11 +6,11 @@
 
 ## 基本信息
 
-**App 名称**: LightGallery
+**App 名称**: Declutter
 
 **副标题**: 智能照片清理与管理
 
-**Bundle ID**: joyhisn.LightGallery
+**Bundle ID**: joyhisn.Declutter
 
 ---
 
@@ -26,12 +26,12 @@
 
 ### 简短描述 (170 字符)
 ```
-LightGallery 是一款智能照片管理工具，帮助您清理重复照片、释放存储空间、保护照片隐私。所有处理均在本地完成。
+Declutter 是一款智能照片管理工具，帮助您清理重复照片、释放存储空间、保护照片隐私。所有处理均在本地完成。
 ```
 
 ### 完整描述
 ```
-LightGallery - 您的智能照片管理助手
+Declutter - 您的智能照片管理助手
 
 📸 智能清理
 • 自动识别重复照片和相似照片
@@ -69,7 +69,7 @@ LightGallery - 您的智能照片管理助手
 ```
 审核员您好，
 
-感谢您审核 LightGallery。以下是一些重要说明：
+感谢您审核 Declutter。以下是一些重要说明：
 
 1. 数据处理方式
    - 所有照片处理均在用户设备本地完成
@@ -136,10 +136,10 @@ LightGallery - 您的智能照片管理助手
 
 | 产品 ID | 名称 | 价格 | 周期 |
 |---------|------|------|------|
-| joyhisn.LightGallery.pro.monthly | 专业版月付 | ¥10 | 1个月 |
-| joyhisn.LightGallery.pro.yearly | 专业版年付 | ¥100 | 1年 |
-| joyhisn.LightGallery.max.monthly | 旗舰版月付 | ¥20 | 1个月 |
-| joyhisn.LightGallery.max.yearly | 旗舰版年付 | ¥200 | 1年 |
+| joyhisn.Declutter.pro.monthly | 专业版月付 | ¥10 | 1个月 |
+| joyhisn.Declutter.pro.yearly | 专业版年付 | ¥100 | 1年 |
+| joyhisn.Declutter.max.monthly | 旗舰版月付 | ¥20 | 1个月 |
+| joyhisn.Declutter.max.yearly | 旗舰版年付 | ¥200 | 1年 |
 
 ---
 

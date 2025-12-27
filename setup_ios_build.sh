@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=========================================="
-echo "LightGallery iOS 构建配置助手"
+echo "Declutter iOS 构建配置助手"
 echo "=========================================="
 echo ""
 
@@ -27,11 +27,11 @@ echo "配置步骤："
 echo "=========================================="
 echo ""
 echo "1. 在 Xcode 中打开项目："
-echo "   open LightGallery.xcodeproj"
+echo "   open Declutter.xcodeproj"
 echo ""
-echo "2. 在左侧项目导航器中选择 'LightGallery' 项目"
+echo "2. 在左侧项目导航器中选择 'Declutter' 项目"
 echo ""
-echo "3. 选择 'LightGallery' target"
+echo "3. 选择 'Declutter' target"
 echo ""
 echo "4. 点击 'Signing & Capabilities' 标签"
 echo ""
@@ -63,7 +63,7 @@ echo ""
 read -p "是否现在打开 Xcode？(y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    open LightGallery.xcodeproj
+    open Declutter.xcodeproj
     echo "✅ 已打开 Xcode"
 fi
 

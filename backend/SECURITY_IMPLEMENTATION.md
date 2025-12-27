@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document summarizes the implementation of Spring Security configuration for the LightGallery backend service, including JWT authentication, CORS configuration, and HTTPS enforcement.
+This document summarizes the implementation of Spring Security configuration for the Declutter backend service, including JWT authentication, CORS configuration, and HTTPS enforcement.
 
 ## Implemented Components
 
@@ -270,6 +270,6 @@ mvn test -Dspring.profiles.active=test
 
 ## Conclusion
 
-The Spring Security configuration provides a robust, secure foundation for the LightGallery backend service. All authentication, authorization, and transport security requirements have been implemented according to the design specification.
+The Spring Security configuration provides a robust, secure foundation for the Declutter backend service. All authentication, authorization, and transport security requirements have been implemented according to the design specification.
 
 The implementation follows Spring Security best practices and industry standards for API security, including JWT authentication, HTTPS enforcement, and comprehensive security headers.

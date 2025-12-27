@@ -1,4 +1,4 @@
-package com.lightgallery.backend.dto;
+package com.declutter.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class SubscriptionProductDTO {
 
     /**
-     * Product ID (e.g., "com.lightgallery.pro.monthly")
+     * Product ID (e.g., "com.declutter.pro.monthly")
      */
     private String productId;
 

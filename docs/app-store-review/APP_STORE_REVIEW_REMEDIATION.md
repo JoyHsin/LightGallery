@@ -1,9 +1,9 @@
-# LightGallery App Store 审核整改文档
+# Declutter App Store 审核整改文档
 
 > 文档版本: 1.0  
 > 创建日期: 2024-12-14  
-> 应用名称: LightGallery  
-> Bundle ID: joyhisn.LightGallery
+> 应用名称: Declutter  
+> Bundle ID: joyhisn.Declutter
 
 ---
 
@@ -40,12 +40,12 @@
 后端和客户端代码中包含微信支付和支付宝支付的实现，虽然 iOS 客户端目前只使用 Apple IAP，但代码中存在这些支付方式的枚举和验证逻辑，可能被审核员发现。
 
 **涉及文件**:
-- `LightGallery/Models/Subscription/SubscriptionTier.swift`
+- `Declutter/Models/Subscription/SubscriptionTier.swift`
 - `backend/src/main/java/com/lightgallery/backend/service/PaymentService.java`
 
 **当前代码**:
 ```swift
-// LightGallery/Models/Subscription/SubscriptionTier.swift (第 85-89 行)
+// Declutter/Models/Subscription/SubscriptionTier.swift (第 85-89 行)
 enum PaymentMethod: String, Codable {
     case appleIAP = "apple_iap"
     case wechatPay = "wechat_pay"  // ❌ 违规
@@ -69,7 +69,7 @@ switch (request.getPaymentMethod().toLowerCase()) {
 
 **方案 A - iOS 客户端移除 (推荐)**:
 ```swift
-// LightGallery/Models/Subscription/SubscriptionTier.swift
+// Declutter/Models/Subscription/SubscriptionTier.swift
 enum PaymentMethod: String, Codable {
     case appleIAP = "apple_iap"
     // 以下支付方式仅用于非 iOS 平台，iOS 版本不包含
@@ -103,8 +103,8 @@ public boolean verifyPayment(PaymentVerificationRequest request) {
 付费墙页面缺少必要的订阅条款说明，包括自动续订说明、取消方式、隐私政策链接等。
 
 **涉及文件**:
-- `LightGallery/Views/Subscription/PaywallView.swift`
-- `LightGallery/Views/Subscription/SubscriptionView.swift`
+- `Declutter/Views/Subscription/PaywallView.swift`
+- `Declutter/Views/Subscription/SubscriptionView.swift`
 
 **当前缺失内容**:
 - ❌ 自动续订说明
@@ -177,7 +177,7 @@ var body: some View {
 登录页面的隐私政策和服务条款按钮点击后没有任何操作。
 
 **涉及文件**:
-- `LightGallery/Views/Auth/LoginView.swift`
+- `Declutter/Views/Auth/LoginView.swift`
 
 **当前代码**:
 ```swift
@@ -233,7 +233,7 @@ Button("隐私政策") {
 当前的相册权限描述没有说明会读取照片元数据（GPS 位置、设备信息），也没有说明数据处理方式。
 
 **涉及文件**:
-- `LightGallery.xcodeproj/project.pbxproj`
+- `Declutter.xcodeproj/project.pbxproj`
 
 **当前描述**:
 ```
@@ -243,7 +243,7 @@ INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "此应用需要访问您的照�
 **整改方案**:
 
 ```
-INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的照片库以：
+INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Declutter 需要访问您的照片库以：
 • 分析和清理重复/相似照片
 • 读取照片元数据（位置、设备信息）用于隐私擦除功能
 • 管理和整理您的照片
@@ -252,7 +252,7 @@ INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的�
 
 **注意**: 由于 Info.plist 描述不支持换行，实际应为：
 ```
-INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的照片库以分析重复照片、读取照片元数据（位置、设备信息）用于隐私擦除功能、管理和整理您的照片。所有照片仅在本地处理，不会上传到服务器。";
+INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Declutter 需要访问您的照片库以分析重复照片、读取照片元数据（位置、设备信息）用于隐私擦除功能、管理和整理您的照片。所有照片仅在本地处理，不会上传到服务器。";
 ```
 
 **预计工时**: 0.5 小时
@@ -267,7 +267,7 @@ INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "LightGallery 需要访问您的�
 当前使用自定义按钮实现 Apple 登录，而非 Apple 官方提供的 `SignInWithAppleButton` 组件。
 
 **涉及文件**:
-- `LightGallery/Views/Auth/LoginView.swift`
+- `Declutter/Views/Auth/LoginView.swift`
 
 **当前代码**:
 ```swift
@@ -344,7 +344,7 @@ SignInWithAppleButton(.signIn) { request in
 设置页面的隐私政策导航链接只显示占位文本。
 
 **涉及文件**:
-- `LightGallery/Views/SettingsView.swift`
+- `Declutter/Views/SettingsView.swift`
 
 **当前代码**:
 ```swift
@@ -391,12 +391,12 @@ App 名称副标题过长，且"隐私保护"可能引起审核员额外关注�
 
 **当前元数据**:
 ```
-名称: LightGallery - 智能照片管理与隐私保护工具
+名称: Declutter - 智能照片管理与隐私保护工具
 ```
 
 **优化建议**:
 ```
-名称: LightGallery
+名称: Declutter
 副标题: 智能照片清理与管理
 ```
 
@@ -421,7 +421,7 @@ App 名称副标题过长，且"隐私保护"可能引起审核员额外关注�
 ```
 审核员您好，
 
-关于 LightGallery 的几点说明：
+关于 Declutter 的几点说明：
 
 1. 数据处理方式
    - 所有照片处理均在用户设备本地完成
@@ -457,7 +457,7 @@ App 名称副标题过长，且"隐私保护"可能引起审核员额外关注�
 部分错误提示信息混合使用中英文，建议统一。
 
 **涉及文件**:
-- `LightGallery/Services/Subscription/SubscriptionService.swift`
+- `Declutter/Services/Subscription/SubscriptionService.swift`
 
 **当前代码**:
 ```swift

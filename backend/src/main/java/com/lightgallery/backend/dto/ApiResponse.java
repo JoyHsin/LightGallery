@@ -1,4 +1,4 @@
-package com.lightgallery.backend.dto;
+package com.declutter.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

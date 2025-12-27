@@ -1,4 +1,4 @@
-package com.lightgallery.backend.util;
+package com.declutter.backend.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

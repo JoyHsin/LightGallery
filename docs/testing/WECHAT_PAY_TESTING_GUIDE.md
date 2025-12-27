@@ -2,7 +2,7 @@
 
 ## 概述
 
-本指南详细说明如何在LightGallery应用中测试真实的微信支付订阅功能。
+本指南详细说明如何在Declutter应用中测试真实的微信支付订阅功能。
 
 **重要提示**: 目前应用主要支持Apple IAP，微信支付功能需要额外配置和开发。
 
@@ -41,13 +41,13 @@ pod 'WechatOpenSDK'
 
 然后运行：
 ```bash
-cd /path/to/LightGallery
+cd /path/to/Declutter
 pod install
 ```
 
 ### 1.2 配置Info.plist
 
-在`LightGallery/Info.plist`中添加：
+在`Declutter/Info.plist`中添加：
 
 ```xml
 <!-- URL Schemes -->
@@ -75,14 +75,14 @@ pod install
 
 ### 1.3 注册微信SDK
 
-修改`LightGallery/LightGalleryApp.swift`：
+修改`Declutter/DeclutterApp.swift`：
 
 ```swift
 import SwiftUI
 import WechatOpenSDK
 
 @main
-struct LightGalleryApp: App {
+struct DeclutterApp: App {
     
     init() {
         // 注册微信SDK
@@ -156,7 +156,7 @@ WECHAT_PAY_NOTIFY_URL=https://yourdomain.com/api/v1/payment/wechat/notify
 
 ### 3.1 创建微信支付服务
 
-创建`LightGallery/Services/WeChatPayManager.swift`：
+创建`Declutter/Services/WeChatPayManager.swift`：
 
 ```swift
 import Foundation
@@ -254,7 +254,7 @@ enum WeChatPayError: Error {
 
 ### 3.2 更新订阅视图
 
-修改`LightGallery/Views/Subscription/SubscriptionView.swift`，添加微信支付选项：
+修改`Declutter/Views/Subscription/SubscriptionView.swift`，添加微信支付选项：
 
 ```swift
 // 在支付方式选择部分添加
@@ -385,7 +385,7 @@ public class WeChatPayService {
         params.put("appid", appId);
         params.put("mch_id", mchId);
         params.put("nonce_str", generateNonceStr());
-        params.put("body", "LightGallery " + product.getDescription());
+        params.put("body", "Declutter " + product.getDescription());
         params.put("out_trade_no", generateTradeNo(userId));
         params.put("total_fee", String.valueOf(product.getPrice() * 100)); // 分为单位
         params.put("spbill_create_ip", "127.0.0.1");

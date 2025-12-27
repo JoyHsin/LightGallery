@@ -6,7 +6,7 @@
 
 ## Overview
 
-This document describes the implementation of the database schema for the LightGallery authentication and subscription system. The implementation includes MySQL database tables, MyBatis-Plus entities, and mapper interfaces with custom queries.
+This document describes the implementation of the database schema for the Declutter authentication and subscription system. The implementation includes MySQL database tables, MyBatis-Plus entities, and mapper interfaces with custom queries.
 
 ## What Was Implemented
 

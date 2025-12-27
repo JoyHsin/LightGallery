@@ -1,4 +1,4 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

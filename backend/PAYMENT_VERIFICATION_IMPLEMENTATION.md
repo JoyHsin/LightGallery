@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the implementation of payment verification for the LightGallery backend service. The implementation covers Apple IAP, WeChat Pay, and Alipay payment verification.
+This document describes the implementation of payment verification for the Declutter backend service. The implementation covers Apple IAP, WeChat Pay, and Alipay payment verification.
 
 ## Implementation Summary
 

@@ -1,4 +1,4 @@
-# LightGallery Sandbox Testing Checklist
+# Declutter Sandbox Testing Checklist
 
 ## Overview
 
@@ -38,7 +38,7 @@ This checklist ensures comprehensive testing of Apple In-App Purchases in the sa
 **Objective**: Verify all subscription products load correctly
 
 **Steps**:
-1. Launch LightGallery app
+1. Launch Declutter app
 2. Navigate to Subscription page
 3. Wait for products to load
 
@@ -304,7 +304,7 @@ _____________________________________________
 **Steps**:
 1. Purchase a subscription
 2. Go to Settings → [Your Name] → Subscriptions
-3. Select LightGallery
+3. Select Declutter
 4. Tap "Cancel Subscription"
 5. Confirm cancellation
 6. Return to app

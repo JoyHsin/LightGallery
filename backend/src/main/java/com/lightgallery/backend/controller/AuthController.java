@@ -1,10 +1,10 @@
-package com.lightgallery.backend.controller;
+package com.declutter.backend.controller;
 
-import com.lightgallery.backend.dto.ApiResponse;
-import com.lightgallery.backend.dto.AuthResponse;
-import com.lightgallery.backend.dto.OAuthExchangeRequest;
-import com.lightgallery.backend.dto.RefreshTokenRequest;
-import com.lightgallery.backend.service.AuthService;
+import com.declutter.backend.dto.ApiResponse;
+import com.declutter.backend.dto.AuthResponse;
+import com.declutter.backend.dto.OAuthExchangeRequest;
+import com.declutter.backend.dto.RefreshTokenRequest;
+import com.declutter.backend.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

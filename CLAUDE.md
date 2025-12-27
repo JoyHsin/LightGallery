@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-LightGallery 是一个 iOS 照片管理应用，包含前端 (Swift/SwiftUI) 和后端 (Java/Spring Boot) 两部分。应用提供照片清理、格式转换、证件照制作等功能，并集成了用户认证和订阅系统。
+Declutter 是一个 iOS 照片管理应用，包含前端 (Swift/SwiftUI) 和后端 (Java/Spring Boot) 两部分。应用提供照片清理、格式转换、证件照制作等功能，并集成了用户认证和订阅系统。
 
 **技术栈**:
 - **iOS**: Swift, SwiftUI, iOS 17.0+, StoreKit 2 (Apple IAP)
@@ -18,12 +18,12 @@ LightGallery 是一个 iOS 照片管理应用，包含前端 (Swift/SwiftUI) 和
 **构建和运行**:
 ```bash
 # 在 Xcode 中打开项目
-open LightGallery.xcodeproj
+open Declutter.xcodeproj
 
 # 命令行构建（需要先配置签名）
 xcodebuild build \
-  -project LightGallery.xcodeproj \
-  -scheme LightGallery \
+  -project Declutter.xcodeproj \
+  -scheme Declutter \
   -destination "platform=iOS Simulator,name=iPhone 15 Pro"
 
 # 部署到真机（需要修改脚本中的设备 ID）
@@ -34,16 +34,16 @@ xcodebuild build \
 ```bash
 # 运行所有测试
 xcodebuild test \
-  -project LightGallery.xcodeproj \
-  -scheme LightGallery \
+  -project Declutter.xcodeproj \
+  -scheme Declutter \
   -destination "platform=iOS Simulator,name=iPhone 15 Pro"
 
 # 运行单个测试类
 xcodebuild test \
-  -project LightGallery.xcodeproj \
-  -scheme LightGallery \
+  -project Declutter.xcodeproj \
+  -scheme Declutter \
   -destination "platform=iOS Simulator,name=iPhone 15 Pro" \
-  -only-testing:LightGalleryTests/TestClassName
+  -only-testing:DeclutterTests/TestClassName
 ```
 
 ### 后端开发
@@ -94,7 +94,7 @@ export DB_PASSWORD=your_password
 
 **核心层次结构**:
 ```
-LightGallery/
+Declutter/
 ├── Models/              # 数据模型
 │   ├── Auth/           # 认证相关模型 (User, OAuthCredential, AuthResponse)
 │   └── Subscription/   # 订阅相关模型 (Subscription, SubscriptionTier, PremiumFeature)
@@ -210,8 +210,8 @@ backend/src/main/java/com/lightgallery/backend/
    - 隐私政策和服务条款链接
 
 3. **Apple Sign In 配置**:
-   - 已在 `LightGallery.entitlements` 中配置
-   - Bundle ID: `joyhisn.LightGallery`
+   - 已在 `Declutter.entitlements` 中配置
+   - Bundle ID: `joyhisn.Declutter`
    - 需要在 Apple Developer Portal 配置 Sign in with Apple capability
 
 ### 环境配置
@@ -238,7 +238,7 @@ APPLE_CLIENT_ID, APPLE_TEAM_ID, APPLE_KEY_ID, APPLE_PRIVATE_KEY
 
 应用支持多语言，通过 `LocalizationManager` 管理:
 - 支持的语言: 简体中文 (zh-Hans), 英文 (en)
-- 本地化文件位置: `LightGallery/Resources/Localizations/`
+- 本地化文件位置: `Declutter/Resources/Localizations/`
 - 使用方式: `LocalizationManager.shared.localizedString(for: key)`
 
 ### 测试指南

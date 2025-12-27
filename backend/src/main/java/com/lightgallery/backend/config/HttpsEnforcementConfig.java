@@ -1,4 +1,4 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

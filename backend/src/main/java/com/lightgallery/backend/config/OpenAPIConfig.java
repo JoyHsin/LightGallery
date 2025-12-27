@@ -1,4 +1,4 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -35,16 +35,16 @@ public class OpenAPIConfig {
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("LightGallery Team")
-                                .email("support@lightgallery.com"))
+                                .email("support@declutter.com"))
                         .license(new License()
                                 .name("Proprietary")
-                                .url("https://lightgallery.com/license")))
+                                .url("https://declutter.com/license")))
                 .servers(List.of(
                         new Server()
                                 .url("http://localhost:" + serverPort + "/api/v1")
                                 .description("Local Development Server"),
                         new Server()
-                                .url("https://api.lightgallery.com/api/v1")
+                                .url("https://api.declutter.com/api/v1")
                                 .description("Production Server")))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()

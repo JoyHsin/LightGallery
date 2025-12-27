@@ -1,7 +1,7 @@
-package com.lightgallery.backend.mapper;
+package com.declutter.backend.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lightgallery.backend.entity.AuthToken;
+import com.declutter.backend.entity.AuthToken;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

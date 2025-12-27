@@ -1,7 +1,7 @@
 # Authentication Implementation Summary
 
 ## Overview
-This document summarizes the implementation of the authentication endpoints for the LightGallery backend service.
+This document summarizes the implementation of the authentication endpoints for the Declutter backend service.
 
 ## Implemented Components
 

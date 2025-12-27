@@ -2,7 +2,7 @@
 
 ## Overview
 
-本设计文档描述了 LightGallery 应用的用户认证和订阅付费系统的技术架构和实现方案。该系统将实现：
+本设计文档描述了 Declutter 应用的用户认证和订阅付费系统的技术架构和实现方案。该系统将实现：
 
 - **多平台第三方登录**：支持微信、支付宝和 Apple ID 三种登录方式
 - **分层订阅模型**：Free、Pro（10元/月或100元/年）、Max（20元/月或200元/年）三个层级
@@ -18,7 +18,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      LightGallery App                        │
+│                      Declutter App                        │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
@@ -754,7 +754,7 @@ We will use **swift-check** (Swift port of QuickCheck) for property-based testin
 ```swift
 import XCTest
 import SwiftCheck
-@testable import LightGallery
+@testable import Declutter
 
 class AuthenticationPropertyTests: XCTestCase {
     
@@ -1574,7 +1574,7 @@ For users who already have the app installed:
 
 ## Conclusion
 
-This design document provides a comprehensive blueprint for implementing a robust, secure, and user-friendly authentication and subscription system for LightGallery. The system is designed to:
+This design document provides a comprehensive blueprint for implementing a robust, secure, and user-friendly authentication and subscription system for Declutter. The system is designed to:
 
 - Provide seamless multi-platform authentication
 - Offer flexible subscription options with clear value propositions

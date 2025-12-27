@@ -1,7 +1,7 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
-import com.lightgallery.backend.entity.User;
-import com.lightgallery.backend.mapper.UserMapper;
+import com.declutter.backend.entity.User;
+import com.declutter.backend.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

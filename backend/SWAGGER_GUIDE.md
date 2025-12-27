@@ -2,7 +2,7 @@
 
 ## Overview
 
-The LightGallery Backend API includes interactive Swagger/OpenAPI documentation that allows you to explore and test all API endpoints directly from your browser.
+The Declutter Backend API includes interactive Swagger/OpenAPI documentation that allows you to explore and test all API endpoints directly from your browser.
 
 ## Accessing Swagger UI
 

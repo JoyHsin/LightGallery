@@ -1,6 +1,6 @@
-# LightGallery Backend Service
+# Declutter Backend Service
 
-Backend service for LightGallery authentication and subscription management system.
+Backend service for Declutter authentication and subscription management system.
 
 ## Technology Stack
 
@@ -140,4 +140,4 @@ curl http://localhost:8080/api/v1/health
 
 ## License
 
-Proprietary - LightGallery
+Proprietary - Declutter

@@ -1,8 +1,8 @@
-# LightGallery Deployment Summary
+# Declutter Deployment Summary
 
 ## Task 29: 准备部署 (Prepare Deployment) - COMPLETED ✅
 
-This document summarizes the deployment preparation work completed for the LightGallery authentication and subscription system.
+This document summarizes the deployment preparation work completed for the Declutter authentication and subscription system.
 
 ---
 
@@ -218,7 +218,7 @@ JWT_SECRET=<your-256-bit-secret>
 
 ### Apple IAP
 ```bash
-APPLE_CLIENT_ID=joyhisn.LightGallery
+APPLE_CLIENT_ID=joyhisn.Declutter
 APPLE_TEAM_ID=P9NDD6BA8Q
 APPLE_IAP_SHARED_SECRET=<from-app-store-connect>
 APPLE_IAP_ENVIRONMENT=production
@@ -341,7 +341,7 @@ If deployment fails:
 ## Documentation Structure
 
 ```
-LightGallery/
+Declutter/
 ├── backend/
 │   ├── DEPLOYMENT_GUIDE.md          # Complete deployment guide
 │   ├── .env.template                # Environment variables template

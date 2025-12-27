@@ -1,16 +1,16 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lightgallery.backend.dto.PaymentVerificationRequest;
-import com.lightgallery.backend.dto.SubscriptionDTO;
-import com.lightgallery.backend.dto.SubscriptionProductDTO;
-import com.lightgallery.backend.dto.SubscriptionSyncRequest;
-import com.lightgallery.backend.entity.Subscription;
-import com.lightgallery.backend.entity.Transaction;
-import com.lightgallery.backend.entity.User;
-import com.lightgallery.backend.mapper.SubscriptionMapper;
-import com.lightgallery.backend.mapper.TransactionMapper;
-import com.lightgallery.backend.mapper.UserMapper;
+import com.declutter.backend.dto.PaymentVerificationRequest;
+import com.declutter.backend.dto.SubscriptionDTO;
+import com.declutter.backend.dto.SubscriptionProductDTO;
+import com.declutter.backend.dto.SubscriptionSyncRequest;
+import com.declutter.backend.entity.Subscription;
+import com.declutter.backend.entity.Transaction;
+import com.declutter.backend.entity.User;
+import com.declutter.backend.mapper.SubscriptionMapper;
+import com.declutter.backend.mapper.TransactionMapper;
+import com.declutter.backend.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -370,7 +370,7 @@ public class SubscriptionService {
         subscription.setStartDate(LocalDateTime.now());
         subscription.setExpiryDate(LocalDateTime.now().plusYears(100)); // Free tier never expires
         subscription.setAutoRenew(false);
-        subscription.setProductId("com.lightgallery.free");
+        subscription.setProductId("com.declutter.free");
         subscription.setLastSyncedAt(LocalDateTime.now());
         subscription.setCreatedAt(LocalDateTime.now());
         subscription.setUpdatedAt(LocalDateTime.now());

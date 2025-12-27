@@ -1,13 +1,13 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
-import com.lightgallery.backend.dto.PaymentVerificationRequest;
-import com.lightgallery.backend.dto.SubscriptionDTO;
-import com.lightgallery.backend.entity.Subscription;
-import com.lightgallery.backend.entity.Transaction;
-import com.lightgallery.backend.entity.User;
-import com.lightgallery.backend.mapper.SubscriptionMapper;
-import com.lightgallery.backend.mapper.TransactionMapper;
-import com.lightgallery.backend.mapper.UserMapper;
+import com.declutter.backend.dto.PaymentVerificationRequest;
+import com.declutter.backend.dto.SubscriptionDTO;
+import com.declutter.backend.entity.Subscription;
+import com.declutter.backend.entity.Transaction;
+import com.declutter.backend.entity.User;
+import com.declutter.backend.mapper.SubscriptionMapper;
+import com.declutter.backend.mapper.TransactionMapper;
+import com.declutter.backend.mapper.UserMapper;
 import net.jqwik.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -237,10 +237,10 @@ class PaymentVerificationPropertyTests {
     @Provide
     Arbitrary<String> productIds() {
         return Arbitraries.of(
-                "com.lightgallery.pro.monthly",
-                "com.lightgallery.pro.yearly",
-                "com.lightgallery.max.monthly",
-                "com.lightgallery.max.yearly"
+                "com.declutter.pro.monthly",
+                "com.declutter.pro.yearly",
+                "com.declutter.max.monthly",
+                "com.declutter.max.yearly"
         );
     }
 
@@ -265,7 +265,7 @@ class PaymentVerificationPropertyTests {
     private String generateReceiptData(String paymentMethod) {
         if ("apple_iap".equals(paymentMethod)) {
             // Generate base64 encoded receipt data for Apple IAP
-            String receiptJson = "{\"receipt\":{\"bundle_id\":\"com.lightgallery\",\"application_version\":\"1.0\"}}";
+            String receiptJson = "{\"receipt\":{\"bundle_id\":\"com.declutter\",\"application_version\":\"1.0\"}}";
             return Base64.getEncoder().encodeToString(receiptJson.getBytes());
         }
         return null;

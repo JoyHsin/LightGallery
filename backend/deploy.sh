@@ -12,13 +12,13 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Configuration
-APP_NAME="lightgallery-backend"
-APP_USER="lightgallery"
-APP_GROUP="lightgallery"
-INSTALL_DIR="/opt/lightgallery"
-CONFIG_DIR="/etc/lightgallery"
-LOG_DIR="/var/log/lightgallery"
-BACKUP_DIR="/var/backups/lightgallery"
+APP_NAME="declutter-backend"
+APP_USER="declutter"
+APP_GROUP="declutter"
+INSTALL_DIR="/opt/declutter"
+CONFIG_DIR="/etc/declutter"
+LOG_DIR="/var/log/declutter"
+BACKUP_DIR="/var/backups/declutter"
 
 # Functions
 print_info() {

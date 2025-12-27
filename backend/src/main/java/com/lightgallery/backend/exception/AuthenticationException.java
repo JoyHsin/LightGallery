@@ -1,4 +1,4 @@
-package com.lightgallery.backend.exception;
+package com.declutter.backend.exception;
 
 /**
  * Authentication Exception

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides complete deployment instructions for the LightGallery user authentication and subscription system. It covers both backend (Java/Spring Boot) and iOS client deployment.
+This guide provides complete deployment instructions for the Declutter user authentication and subscription system. It covers both backend (Java/Spring Boot) and iOS client deployment.
 
 **Feature**: User Authentication and Subscription Management  
 **Spec Location**: `.kiro/specs/user-auth-subscription/`  
@@ -225,7 +225,7 @@ Create `/etc/systemd/system/lightgallery-backend.service`:
 
 ```ini
 [Unit]
-Description=LightGallery Backend Service
+Description=Declutter Backend Service
 After=network.target mysql.service
 
 [Service]
@@ -291,15 +291,15 @@ Expected health response:
 2. Navigate to **My Apps** → **+** → **New App**
 3. Configure:
    - **Platform**: iOS
-   - **Name**: LightGallery
+   - **Name**: Declutter
    - **Primary Language**: Chinese (Simplified)
-   - **Bundle ID**: joyhisn.LightGallery
+   - **Bundle ID**: joyhisn.Declutter
    - **SKU**: lightgallery-ios-001
 
 #### Configure In-App Purchases
 
 1. Navigate to: **App** → **Features** → **In-App Purchases**
-2. Create Subscription Group: "LightGallery Subscriptions"
+2. Create Subscription Group: "Declutter Subscriptions"
 3. Create 4 subscription products:
 
 **Pro Monthly** (`com.lightgallery.pro.monthly`):
@@ -348,15 +348,15 @@ Expected health response:
 
 #### Enable In-App Purchase Capability
 
-1. Open `LightGallery.xcodeproj` in Xcode
-2. Select **LightGallery** target
+1. Open `Declutter.xcodeproj` in Xcode
+2. Select **Declutter** target
 3. Go to **Signing & Capabilities** tab
 4. Click **+ Capability**
 5. Add **In-App Purchase**
 
 #### Update Entitlements
 
-Verify `LightGallery/LightGallery.entitlements` contains:
+Verify `Declutter/Declutter.entitlements` contains:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -377,7 +377,7 @@ Verify `LightGallery/LightGallery.entitlements` contains:
 
 #### Update Backend API URL
 
-In `LightGallery/Services/BackendAPIClient.swift`, update for production:
+In `Declutter/Services/BackendAPIClient.swift`, update for production:
 
 ```swift
 #if DEBUG
@@ -389,7 +389,7 @@ private let baseURL = "https://api.lightgallery.app/api/v1"
 
 #### Verify Product IDs
 
-In `LightGallery/Services/Subscription/AppleIAPManager.swift`:
+In `Declutter/Services/Subscription/AppleIAPManager.swift`:
 
 ```swift
 private let productIds: Set<String> = [
@@ -480,7 +480,7 @@ ALIPAY_PUBLIC_KEY=<your-alipay-public-key>
 ### OAuth Configuration - Apple
 
 ```bash
-APPLE_CLIENT_ID=joyhisn.LightGallery
+APPLE_CLIENT_ID=joyhisn.Declutter
 APPLE_TEAM_ID=P9NDD6BA8Q
 APPLE_KEY_ID=<your-apple-key-id>
 APPLE_PRIVATE_KEY=<your-apple-private-key>
@@ -541,7 +541,7 @@ ALIPAY_PRIVATE_KEY=your-alipay-private-key
 ALIPAY_PUBLIC_KEY=your-alipay-public-key
 
 # OAuth Configuration - Apple
-APPLE_CLIENT_ID=joyhisn.LightGallery
+APPLE_CLIENT_ID=joyhisn.Declutter
 APPLE_TEAM_ID=P9NDD6BA8Q
 APPLE_KEY_ID=your-apple-key-id
 APPLE_PRIVATE_KEY=your-apple-private-key
@@ -1486,5 +1486,5 @@ mysql -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD -e "SELECT 1"
 
 **Document Version**: 1.0  
 **Last Updated**: December 7, 2024  
-**Maintained By**: LightGallery Development Team
+**Maintained By**: Declutter Development Team
 

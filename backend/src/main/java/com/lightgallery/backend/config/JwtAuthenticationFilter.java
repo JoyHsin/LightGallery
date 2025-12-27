@@ -1,6 +1,6 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
-import com.lightgallery.backend.util.JwtUtil;
+import com.declutter.backend.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

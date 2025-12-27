@@ -1,7 +1,7 @@
 # Subscription Implementation Summary
 
 ## Overview
-This document summarizes the implementation of the subscription endpoints and service for the LightGallery backend.
+This document summarizes the implementation of the subscription endpoints and service for the Declutter backend.
 
 ## Implemented Components
 

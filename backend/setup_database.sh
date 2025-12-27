@@ -13,7 +13,7 @@ echo ""
 # Configuration
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3306}"
-DB_NAME="${DB_NAME:-lightgallery}"
+DB_NAME="${DB_NAME:-declutter}"
 DB_USERNAME="${DB_USERNAME:-root}"
 DB_PASSWORD="${DB_PASSWORD:-123456}"
 

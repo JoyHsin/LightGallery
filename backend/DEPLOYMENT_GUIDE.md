@@ -1,8 +1,8 @@
-# LightGallery Backend Deployment Guide
+# Declutter Backend Deployment Guide
 
 ## Overview
 
-This guide covers the deployment of the LightGallery backend service to production, including database configuration, environment variable setup, and Apple IAP configuration.
+This guide covers the deployment of the Declutter backend service to production, including database configuration, environment variable setup, and Apple IAP configuration.
 
 ## Prerequisites
 
@@ -169,7 +169,7 @@ For systemd service:
 # Create systemd service file
 sudo cat > /etc/systemd/system/lightgallery-backend.service << 'EOF'
 [Unit]
-Description=LightGallery Backend Service
+Description=Declutter Backend Service
 After=network.target mysql.service
 
 [Service]
@@ -242,7 +242,7 @@ openssl pkcs12 -info -in /etc/lightgallery/keystore.p12
 
 1. **Create App in App Store Connect**
    - Go to https://appstoreconnect.apple.com
-   - Create new app with bundle ID: `joyhisn.LightGallery`
+   - Create new app with bundle ID: `joyhisn.Declutter`
    - Fill in app information
 
 2. **Configure In-App Purchases**
@@ -253,25 +253,25 @@ openssl pkcs12 -info -in /etc/lightgallery/keystore.p12
    - Product ID: `com.lightgallery.pro.monthly`
    - Type: Auto-Renewable Subscription
    - Price: ¥10/month
-   - Subscription Group: LightGallery Subscriptions
+   - Subscription Group: Declutter Subscriptions
 
    **Pro Yearly:**
    - Product ID: `com.lightgallery.pro.yearly`
    - Type: Auto-Renewable Subscription
    - Price: ¥100/year
-   - Subscription Group: LightGallery Subscriptions
+   - Subscription Group: Declutter Subscriptions
 
    **Max Monthly:**
    - Product ID: `com.lightgallery.max.monthly`
    - Type: Auto-Renewable Subscription
    - Price: ¥20/month
-   - Subscription Group: LightGallery Subscriptions
+   - Subscription Group: Declutter Subscriptions
 
    **Max Yearly:**
    - Product ID: `com.lightgallery.max.yearly`
    - Type: Auto-Renewable Subscription
    - Price: ¥200/year
-   - Subscription Group: LightGallery Subscriptions
+   - Subscription Group: Declutter Subscriptions
 
 3. **Generate Shared Secret**
    - Go to: App → General → App Information
@@ -279,7 +279,7 @@ openssl pkcs12 -info -in /etc/lightgallery/keystore.p12
    - Copy the shared secret and add to environment variables
 
 4. **Configure Subscription Groups**
-   - Create subscription group: "LightGallery Subscriptions"
+   - Create subscription group: "Declutter Subscriptions"
    - Add all four products to this group
    - Set upgrade/downgrade paths:
      - Pro Monthly ↔ Pro Yearly (crossgrade)
@@ -292,7 +292,7 @@ openssl pkcs12 -info -in /etc/lightgallery/keystore.p12
 Update the iOS app's StoreKit configuration file:
 
 ```swift
-// LightGallery/Services/Subscription/AppleIAPManager.swift
+// Declutter/Services/Subscription/AppleIAPManager.swift
 
 // Update product IDs for production
 private let productIds = [
@@ -306,7 +306,7 @@ private let productIds = [
 ### 4.3 Enable In-App Purchase Capability
 
 In Xcode:
-1. Select LightGallery target
+1. Select Declutter target
 2. Go to "Signing & Capabilities"
 3. Click "+ Capability"
 4. Add "In-App Purchase"
@@ -314,7 +314,7 @@ In Xcode:
 Update entitlements file:
 
 ```xml
-<!-- LightGallery/LightGallery.entitlements -->
+<!-- Declutter/Declutter.entitlements -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -364,14 +364,14 @@ Create a StoreKit configuration file for local testing:
 
 ```bash
 # In Xcode: File → New → File → StoreKit Configuration File
-# Name: LightGallery.storekit
+# Name: Declutter.storekit
 ```
 
 Add products to the configuration file:
 
 ```json
 {
-  "identifier" : "LightGallery",
+  "identifier" : "Declutter",
   "nonRenewingSubscriptions" : [],
   "products" : [],
   "settings" : {
@@ -381,7 +381,7 @@ Add products to the configuration file:
     {
       "id" : "lightgallery_subscriptions",
       "localizations" : [],
-      "name" : "LightGallery Subscriptions",
+      "name" : "Declutter Subscriptions",
       "subscriptions" : [
         {
           "adHocOffers" : [],
@@ -481,7 +481,7 @@ Add products to the configuration file:
 
 **Test Case 1: Purchase Flow**
 1. Sign out of App Store on test device
-2. Launch LightGallery app
+2. Launch Declutter app
 3. Navigate to Subscription page
 4. Select Pro Monthly subscription
 5. When prompted, sign in with sandbox test account

@@ -1,15 +1,15 @@
-package com.lightgallery.backend.service;
+package com.declutter.backend.service;
 
-import com.lightgallery.backend.dto.PaymentVerificationRequest;
-import com.lightgallery.backend.dto.SubscriptionDTO;
-import com.lightgallery.backend.dto.SubscriptionProductDTO;
-import com.lightgallery.backend.dto.SubscriptionSyncRequest;
-import com.lightgallery.backend.entity.Subscription;
-import com.lightgallery.backend.entity.Transaction;
-import com.lightgallery.backend.entity.User;
-import com.lightgallery.backend.mapper.SubscriptionMapper;
-import com.lightgallery.backend.mapper.TransactionMapper;
-import com.lightgallery.backend.mapper.UserMapper;
+import com.declutter.backend.dto.PaymentVerificationRequest;
+import com.declutter.backend.dto.SubscriptionDTO;
+import com.declutter.backend.dto.SubscriptionProductDTO;
+import com.declutter.backend.dto.SubscriptionSyncRequest;
+import com.declutter.backend.entity.Subscription;
+import com.declutter.backend.entity.Transaction;
+import com.declutter.backend.entity.User;
+import com.declutter.backend.mapper.SubscriptionMapper;
+import com.declutter.backend.mapper.TransactionMapper;
+import com.declutter.backend.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,7 +72,7 @@ class SubscriptionServiceTest {
         testSubscription.setStartDate(LocalDateTime.now());
         testSubscription.setExpiryDate(LocalDateTime.now().plusMonths(1));
         testSubscription.setAutoRenew(true);
-        testSubscription.setProductId("com.lightgallery.pro.monthly");
+        testSubscription.setProductId("com.declutter.pro.monthly");
         testSubscription.setOriginalTransactionId("txn-123");
         testSubscription.setLastSyncedAt(LocalDateTime.now());
         testSubscription.setCreatedAt(LocalDateTime.now());
@@ -81,7 +81,7 @@ class SubscriptionServiceTest {
         // Setup payment verification request
         paymentRequest = PaymentVerificationRequest.builder()
                 .paymentMethod("apple_iap")
-                .productId("com.lightgallery.pro.monthly")
+                .productId("com.declutter.pro.monthly")
                 .transactionId("txn-456")
                 .receiptData("base64-encoded-receipt")
                 .platform("ios")
@@ -99,7 +99,7 @@ class SubscriptionServiceTest {
 
         // Verify Pro Monthly
         SubscriptionProductDTO proMonthly = products.stream()
-                .filter(p -> "com.lightgallery.pro.monthly".equals(p.getProductId()))
+                .filter(p -> "com.declutter.pro.monthly".equals(p.getProductId()))
                 .findFirst()
                 .orElse(null);
         assertNotNull(proMonthly);
@@ -111,7 +111,7 @@ class SubscriptionServiceTest {
 
         // Verify Pro Yearly
         SubscriptionProductDTO proYearly = products.stream()
-                .filter(p -> "com.lightgallery.pro.yearly".equals(p.getProductId()))
+                .filter(p -> "com.declutter.pro.yearly".equals(p.getProductId()))
                 .findFirst()
                 .orElse(null);
         assertNotNull(proYearly);
@@ -121,7 +121,7 @@ class SubscriptionServiceTest {
 
         // Verify Max Monthly
         SubscriptionProductDTO maxMonthly = products.stream()
-                .filter(p -> "com.lightgallery.max.monthly".equals(p.getProductId()))
+                .filter(p -> "com.declutter.max.monthly".equals(p.getProductId()))
                 .findFirst()
                 .orElse(null);
         assertNotNull(maxMonthly);
@@ -131,7 +131,7 @@ class SubscriptionServiceTest {
 
         // Verify Max Yearly
         SubscriptionProductDTO maxYearly = products.stream()
-                .filter(p -> "com.lightgallery.max.yearly".equals(p.getProductId()))
+                .filter(p -> "com.declutter.max.yearly".equals(p.getProductId()))
                 .findFirst()
                 .orElse(null);
         assertNotNull(maxYearly);
@@ -294,7 +294,7 @@ class SubscriptionServiceTest {
     @Test
     void testVerifyAndUpdateSubscription_YearlySubscription_CalculatesCorrectExpiry() {
         // Given
-        paymentRequest.setProductId("com.lightgallery.pro.yearly");
+        paymentRequest.setProductId("com.declutter.pro.yearly");
         when(userMapper.selectById(1L)).thenReturn(testUser);
         when(transactionMapper.selectOne(any())).thenReturn(null);
         when(subscriptionMapper.findActiveByUserId(1L)).thenReturn(null);

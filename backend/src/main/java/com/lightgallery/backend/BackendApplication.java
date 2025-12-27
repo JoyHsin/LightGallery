@@ -1,4 +1,4 @@
-package com.lightgallery.backend;
+package com.declutter.backend;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Main entry point for the Spring Boot application
  */
 @SpringBootApplication
-@MapperScan("com.lightgallery.backend.mapper")
+@MapperScan("com.declutter.backend.mapper")
 public class BackendApplication {
 
     public static void main(String[] args) {

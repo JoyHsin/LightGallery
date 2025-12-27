@@ -1,8 +1,8 @@
-# LightGallery Deployment Documentation Index
+# Declutter Deployment Documentation Index
 
 ## 📚 Complete Deployment Documentation
 
-This index provides quick access to all deployment-related documentation for the LightGallery authentication and subscription system.
+This index provides quick access to all deployment-related documentation for the Declutter authentication and subscription system.
 
 ---
 
@@ -194,7 +194,7 @@ sudo ./setup_production_database.sh
 ## 🗂️ Documentation Structure
 
 ```
-LightGallery/
+Declutter/
 │
 ├── 📄 DEPLOYMENT_INDEX.md              ← You are here
 ├── 📄 DEPLOYMENT_SUMMARY.md            ← Start here for overview
@@ -406,4 +406,4 @@ See section 8 in [DEPLOYMENT_GUIDE.md](backend/DEPLOYMENT_GUIDE.md#8-troubleshoo
 **Status**: READY FOR DEPLOYMENT 🚀
 
 **Last Updated**: December 7, 2024  
-**Maintained By**: LightGallery Development Team
+**Maintained By**: Declutter Development Team

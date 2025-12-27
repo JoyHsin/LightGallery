@@ -1,4 +1,4 @@
-# LightGallery iOS 构建指南
+# Declutter iOS 构建指南
 
 ## 问题诊断
 
@@ -13,13 +13,13 @@
 ### 1. 在 Xcode 中打开项目
 
 ```bash
-open LightGallery.xcodeproj
+open Declutter.xcodeproj
 ```
 
 ### 2. 配置签名
 
-1. 在左侧项目导航器中，点击最顶部的 **LightGallery** 项目图标（蓝色的）
-2. 在中间区域，选择 **TARGETS** 下的 **LightGallery**
+1. 在左侧项目导航器中，点击最顶部的 **Declutter** 项目图标（蓝色的）
+2. 在中间区域，选择 **TARGETS** 下的 **Declutter**
 3. 点击顶部的 **Signing & Capabilities** 标签
 4. 确保 **Automatically manage signing** 已勾选 ✅
 5. 在 **Team** 下拉菜单中：
@@ -58,10 +58,10 @@ open LightGallery.xcodeproj
 - 断开并重新连接 USB 线
 - 在 Xcode 菜单中选择 **Window** > **Devices and Simulators**，检查设备状态
 
-### Q: 提示 "Signing for LightGallery requires a development team"
+### Q: 提示 "Signing for Declutter requires a development team"
 **A:** 按照上面的步骤 2 配置签名
 
-### Q: 提示 "Could not launch LightGallery"
+### Q: 提示 "Could not launch Declutter"
 **A:** 需要在 iPhone 上信任开发者证书（见步骤 5）
 
 ### Q: 构建成功但应用闪退

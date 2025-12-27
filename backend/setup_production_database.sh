@@ -40,8 +40,8 @@ prompt_credentials() {
     read -p "Database Port [3306]: " DB_PORT
     DB_PORT=${DB_PORT:-3306}
     
-    read -p "Database Name [lightgallery]: " DB_NAME
-    DB_NAME=${DB_NAME:-lightgallery}
+    read -p "Database Name [declutter]: " DB_NAME
+    DB_NAME=${DB_NAME:-declutter}
     
     read -p "Admin Username [root]: " ADMIN_USER
     ADMIN_USER=${ADMIN_USER:-root}
@@ -49,8 +49,8 @@ prompt_credentials() {
     read -sp "Admin Password: " ADMIN_PASS
     echo ""
     
-    read -p "Application Username [lightgallery_app]: " APP_USER
-    APP_USER=${APP_USER:-lightgallery_app}
+    read -p "Application Username [declutter_app]: " APP_USER
+    APP_USER=${APP_USER:-declutter_app}
     
     # Generate strong password for app user
     print_info "Generating strong password for application user..."
@@ -209,13 +209,13 @@ verify_indexes() {
 save_credentials() {
     print_step "Saving credentials..."
     
-    CREDS_FILE="/etc/lightgallery/database.credentials"
+    CREDS_FILE="/etc/declutter/database.credentials"
     
     # Create directory if it doesn't exist
-    if [ ! -d "/etc/lightgallery" ]; then
-        print_warn "/etc/lightgallery directory doesn't exist"
+    if [ ! -d "/etc/declutter" ]; then
+        print_warn "/etc/declutter directory doesn't exist"
         print_info "Creating directory..."
-        sudo mkdir -p /etc/lightgallery
+        sudo mkdir -p /etc/declutter
     fi
     
     # Save credentials
@@ -243,14 +243,14 @@ EOF
 setup_backup() {
     print_step "Setting up automated backups..."
     
-    BACKUP_SCRIPT="/usr/local/bin/backup-lightgallery-db.sh"
+    BACKUP_SCRIPT="/usr/local/bin/backup-declutter-db.sh"
     
     sudo tee "$BACKUP_SCRIPT" > /dev/null << EOF
 #!/bin/bash
 # LightGallery Database Backup Script
 # Generated: $(date)
 
-BACKUP_DIR="/var/backups/lightgallery"
+BACKUP_DIR="/var/backups/declutter"
 DATE=\$(date +%Y%m%d_%H%M%S)
 DB_HOST="$DB_HOST"
 DB_PORT="$DB_PORT"
@@ -267,14 +267,14 @@ mysqldump -h \$DB_HOST -P \$DB_PORT -u \$DB_USER -p\$DB_PASS \\
   --routines \\
   --triggers \\
   --events \\
-  \$DB_NAME | gzip > \$BACKUP_DIR/lightgallery_\$DATE.sql.gz
+  \$DB_NAME | gzip > \$BACKUP_DIR/declutter_\$DATE.sql.gz
 
 # Check if backup was successful
 if [ \$? -eq 0 ]; then
-    echo "[\$(date)] Backup successful: lightgallery_\$DATE.sql.gz"
+    echo "[\$(date)] Backup successful: declutter_\$DATE.sql.gz"
     
     # Keep only last 30 days of backups
-    find \$BACKUP_DIR -name "lightgallery_*.sql.gz" -mtime +30 -delete
+    find \$BACKUP_DIR -name "declutter_*.sql.gz" -mtime +30 -delete
 else
     echo "[\$(date)] Backup failed!" >&2
     exit 1
@@ -289,7 +289,7 @@ EOF
     read -p "Add daily backup to crontab? (y/n) " -n 1 -r
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        (sudo crontab -l 2>/dev/null; echo "0 2 * * * $BACKUP_SCRIPT >> /var/log/lightgallery-backup.log 2>&1") | sudo crontab -
+        (sudo crontab -l 2>/dev/null; echo "0 2 * * * $BACKUP_SCRIPT >> /var/log/declutter-backup.log 2>&1") | sudo crontab -
         print_info "Daily backup scheduled at 2:00 AM ✓"
     fi
 }
@@ -307,7 +307,7 @@ display_summary() {
     echo "  Username: $APP_USER"
     echo "  Password: $APP_PASS"
     echo ""
-    echo "Credentials saved to: /etc/lightgallery/database.credentials"
+    echo "Credentials saved to: /etc/declutter/database.credentials"
     echo ""
     echo "Next Steps:"
     echo "  1. Update backend environment variables:"
@@ -317,7 +317,7 @@ display_summary() {
     echo "     export DB_USERNAME=$APP_USER"
     echo "     export DB_PASSWORD=$APP_PASS"
     echo ""
-    echo "  2. Or add to /etc/lightgallery/production.env:"
+    echo "  2. Or add to /etc/declutter/production.env:"
     echo "     DB_HOST=$DB_HOST"
     echo "     DB_PORT=$DB_PORT"
     echo "     DB_NAME=$DB_NAME"

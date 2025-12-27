@@ -1,4 +1,4 @@
-package com.lightgallery.backend;
+package com.declutter.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

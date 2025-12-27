@@ -1,8 +1,8 @@
-# LightGallery Backend API Documentation
+# Declutter Backend API Documentation
 
 ## Overview
 
-The LightGallery Backend API provides authentication and subscription management services for the LightGallery mobile application. This API supports:
+The Declutter Backend API provides authentication and subscription management services for the Declutter mobile application. This API supports:
 
 - **Multi-platform OAuth authentication** (Apple, WeChat, Alipay)
 - **Tiered subscription management** (Free, Pro, Max)

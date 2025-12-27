@@ -1,11 +1,11 @@
-package com.lightgallery.backend.controller;
+package com.declutter.backend.controller;
 
-import com.lightgallery.backend.dto.ApiResponse;
-import com.lightgallery.backend.dto.PaymentVerificationRequest;
-import com.lightgallery.backend.dto.SubscriptionDTO;
-import com.lightgallery.backend.dto.SubscriptionProductDTO;
-import com.lightgallery.backend.dto.SubscriptionSyncRequest;
-import com.lightgallery.backend.service.SubscriptionService;
+import com.declutter.backend.dto.ApiResponse;
+import com.declutter.backend.dto.PaymentVerificationRequest;
+import com.declutter.backend.dto.SubscriptionDTO;
+import com.declutter.backend.dto.SubscriptionProductDTO;
+import com.declutter.backend.dto.SubscriptionSyncRequest;
+import com.declutter.backend.service.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,7 +60,7 @@ public class SubscriptionController {
                                       "message": "Products retrieved successfully",
                                       "data": [
                                         {
-                                          "productId": "com.lightgallery.pro.monthly",
+                                          "productId": "com.declutter.pro.monthly",
                                           "tier": "pro",
                                           "billingPeriod": "monthly",
                                           "price": 10.00,
@@ -70,7 +70,7 @@ public class SubscriptionController {
                                           "features": ["Smart Clean", "Duplicate Detection", "Photo Enhancer"]
                                         },
                                         {
-                                          "productId": "com.lightgallery.pro.yearly",
+                                          "productId": "com.declutter.pro.yearly",
                                           "tier": "pro",
                                           "billingPeriod": "yearly",
                                           "price": 100.00,
@@ -134,7 +134,7 @@ public class SubscriptionController {
                                         "startDate": "2024-12-01T00:00:00",
                                         "expiryDate": "2025-01-01T00:00:00",
                                         "autoRenew": true,
-                                        "productId": "com.lightgallery.pro.monthly",
+                                        "productId": "com.declutter.pro.monthly",
                                         "lastSyncedAt": "2024-12-07T10:00:00"
                                       }
                                     }
@@ -206,7 +206,7 @@ public class SubscriptionController {
                                         "startDate": "2024-12-07T10:00:00",
                                         "expiryDate": "2025-01-07T10:00:00",
                                         "autoRenew": true,
-                                        "productId": "com.lightgallery.pro.monthly",
+                                        "productId": "com.declutter.pro.monthly",
                                         "lastSyncedAt": "2024-12-07T10:00:00"
                                       }
                                     }
@@ -431,7 +431,7 @@ public class SubscriptionController {
                                         "startDate": "2024-12-07T10:00:00",
                                         "expiryDate": "2025-01-07T10:00:00",
                                         "autoRenew": false,
-                                        "productId": "com.lightgallery.pro.monthly",
+                                        "productId": "com.declutter.pro.monthly",
                                         "lastSyncedAt": "2024-12-07T10:00:00"
                                       }
                                     }

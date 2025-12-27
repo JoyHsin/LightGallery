@@ -1,4 +1,4 @@
-package com.lightgallery.backend.config;
+package com.declutter.backend.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

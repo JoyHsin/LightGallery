@@ -43,13 +43,13 @@ if [ "$create_db" = "y" ]; then
     echo "Enter MySQL root password:"
     read -s mysql_password
     
-    mysql -u root -p"$mysql_password" -e "CREATE DATABASE IF NOT EXISTS lightgallery CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null
+    mysql -u root -p"$mysql_password" -e "CREATE DATABASE IF NOT EXISTS declutter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>/dev/null
     
     if [ $? -eq 0 ]; then
-        echo "✅ Database 'lightgallery' created successfully"
+        echo "✅ Database 'declutter' created successfully"
     else
         echo "❌ Failed to create database. Please create it manually:"
-        echo "   CREATE DATABASE lightgallery CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+        echo "   CREATE DATABASE declutter CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
     fi
 fi
 

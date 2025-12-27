@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a summary of the API documentation implementation for the LightGallery Backend service.
+This document provides a summary of the API documentation implementation for the Declutter Backend service.
 
 ## What Was Implemented
 

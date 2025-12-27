@@ -113,8 +113,8 @@ journalctl -u lightgallery-backend -f
 ### App Store Connect
 
 1. **Create App**: https://appstoreconnect.apple.com
-   - Bundle ID: `joyhisn.LightGallery`
-   - Name: LightGallery
+   - Bundle ID: `joyhisn.Declutter`
+   - Name: Declutter
 
 2. **Create IAP Products**:
    - `com.lightgallery.pro.monthly` - ¥10/月
