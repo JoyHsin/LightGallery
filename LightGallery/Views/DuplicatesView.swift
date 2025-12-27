@@ -105,13 +105,23 @@ struct DuplicateGroupCard: View {
     @EnvironmentObject var localizationManager: LocalizationManager
     let group: DuplicateGroup
     let onMerge: () -> Void
-    
+
+    private var localizedDateString: String {
+        guard let first = group.assets.first else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        let localeIdentifier = (localizationManager.language == .simplifiedChinese || localizationManager.language == .traditionalChinese) ? "zh_CN" : "en_US"
+        formatter.locale = Locale(identifier: localeIdentifier)
+        return formatter.string(from: first.creationDate)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(group.dateString)
+                    Text(localizedDateString)
                         .font(.headline)
                         .foregroundColor(.primary)
                     Text("\(group.assets.count) " + "photos".localized) // Simplified
